@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const errorHandler = require('./middleware/errorHandler');
 const app = express();
+const authRouter = require('./routes/auth');
 
 // Application-level middleware
 app.use(express.json());
@@ -14,6 +15,9 @@ app.use(cors());
 app.get('/', (req, res) => {
   res.json({ message: 'Index' })
 });
+
+app.use('/auth', authRouter)
+
 
 // Global error handler
 app.use(errorHandler);
