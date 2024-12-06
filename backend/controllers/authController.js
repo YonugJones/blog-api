@@ -1,19 +1,21 @@
+require('dotenv').config();
 const prisma = require('../prisma/prismaClient');
 const asyncHandler = require('express-async-handler');
 const CustomError = require('../errors/customError');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const signup = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
   const checkUsername = await prisma.user.findUnique({ where: { username }});
   if (checkUsername) {
-    throw new CustomError(409, 'Username is taken');
+    throw new CustomError('Username is taken', 409);
   };
 
   const checkEmail = await prisma.user.findUnique({ where: { email } });
   if (checkEmail) {
-    throw new CustomError(409, 'Email is taken');
+    throw new CustomError('Email is taken', 409);
   };
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -22,7 +24,7 @@ const signup = asyncHandler(async (req, res) => {
     username,
     email,
     password: hashedPassword
-  })
+  });
 
   res.status(201).json({
     success: true,
@@ -34,6 +36,33 @@ const signup = asyncHandler(async (req, res) => {
   });
 });
 
+const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    throw new CustomError('Incorrect email', 401);
+  };
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new CustomError('Incorrect password', 401);
+  };
+
+  const token = jwt.sign(
+    { id: user.id, username: user.username, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
+  res.send(200).json({
+    success: true,
+    message: 'Logged in successfully',
+    token,
+  })
+});
+
 module.exports = {
-  signup
+  signup,
+  login
 }
