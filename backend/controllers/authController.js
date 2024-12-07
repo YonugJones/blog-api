@@ -57,7 +57,7 @@ const login = asyncHandler(async (req, res) => {
     { expiresIn: '1h' }
   );
 
-  res.send(200).json({
+  res.status(200).json({
     success: true,
     message: 'Logged in successfully',
     token,
