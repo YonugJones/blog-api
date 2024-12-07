@@ -4,11 +4,7 @@ const CustomError = require('../errors/customError');
 
 const getAllUsers = asyncHandler(async (req, res) => {
   const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      username: true,
-      email: true,
-    },
+    select: { id: true, username: true, email: true }
   });
 
   if (!users) {
