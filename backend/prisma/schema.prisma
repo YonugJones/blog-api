@@ -14,13 +14,14 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  name     String?
-  username String    @unique
-  email    String    @unique
-  password String
-  posts    Post[]
-  comments Comment[]
+  id        Int       @id @default(autoincrement())
+  name      String?
+  username  String    @unique
+  email     String    @unique
+  password  String
+  isDeleted Boolean   @default(false)
+  posts     Post[]
+  comments  Comment[]
 }
 
 model Post {
@@ -28,6 +29,7 @@ model Post {
   title     String
   content   String
   createdAt DateTime  @default(now())
+  isDeleted Boolean   @default(false)
   author    User      @relation(fields: [authorId], references: [id])
   authorId  Int
   comments  Comment[]
@@ -37,6 +39,7 @@ model Comment {
   id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
   post      Post     @relation(fields: [postId], references: [id])
   postId    Int
   user      User     @relation(fields: [userId], references: [id])
