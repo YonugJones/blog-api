@@ -5,6 +5,7 @@ const cors = require('cors');
 const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
 
 // Application-level middleware
 app.use(express.json());
@@ -17,12 +18,10 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRouter)
-
+app.use('/users', userRouter)
 
 // Global error handler
 app.use(errorHandler);
-
-
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
