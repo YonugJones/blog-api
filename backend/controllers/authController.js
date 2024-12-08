@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const signup = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, isAdmin = false } = req.body;
 
   const checkUsername = await prisma.user.findUnique({ where: { username }});
   if (checkUsername) {
@@ -24,7 +24,8 @@ const signup = asyncHandler(async (req, res) => {
     data: {
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      isAdmin
     },
   });
 
@@ -52,7 +53,7 @@ const login = asyncHandler(async (req, res) => {
   };
 
   const token = jwt.sign(
-    { id: user.id, username: user.username, email: user.email },
+    { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin },
     process.env.JWT_SECRET,
     { expiresIn: '1h' }
   );
