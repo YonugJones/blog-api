@@ -13,7 +13,6 @@ const authenticateToken = asyncHandler(async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
-    console.log("Decoded User: ", req.user);  // Log decoded user
     next();
   } catch (err) {
     if (err instanceof jwt.ExpiredError) {
