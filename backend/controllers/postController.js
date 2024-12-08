@@ -2,6 +2,26 @@ const prisma = require('../prisma/prismaClient');
 const asyncHandler = require('express-async-handler');
 const CustomError = require('../errors/customError');
 
+const getAllPosts = asyncHandler(async (req, res) => {
+  const posts = await prisma.post.findMany({
+    select: {
+      title: true,
+      content: true,
+      author: {
+        select: {
+          username: true
+        },
+      },
+    },
+  });
+
+  if (posts.length === 0) {
+    return res.status(200).json({ messsage: 'No posts found', data: [] });
+  }
+
+  return res.status(200).json(posts)
+});
+
 const createPost = asyncHandler(async (req, res) => {
   const user = req.user;
   if (!user) {
@@ -25,5 +45,6 @@ const createPost = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getAllPosts,
   createPost
 }
