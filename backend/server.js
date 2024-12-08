@@ -6,6 +6,7 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
+const postRouter = require('./routes/post');
 
 // Application-level middleware
 app.use(express.json());
@@ -17,8 +18,9 @@ app.get('/', (req, res) => {
   res.json({ message: 'Index' })
 });
 
-app.use('/auth', authRouter)
-app.use('/users', userRouter)
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
+app.use('/posts', postRouter);
 
 // Global error handler
 app.use(errorHandler);
