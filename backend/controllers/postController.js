@@ -7,10 +7,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
     select: {
       title: true,
       content: true,
-      author: {
-        select: {
-          username: true
-        },
+      author: { select: { username: true }
       },
     },
   });
@@ -20,6 +17,28 @@ const getAllPosts = asyncHandler(async (req, res) => {
   }
 
   return res.status(200).json(posts)
+});
+
+const getPostById = asyncHandler(async (req, res) => {
+  const postId = parseInt(req.params.id, 10);
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: {
+      title: true,
+      content: true,
+      author: { select: { username: true } },
+      comments: { select: {
+        content: true,
+        user: { select: { username: true } }} 
+        }
+      }
+  });
+
+  if (!post) {
+    throw new CustomError('Post not found', 404);
+  }
+
+  return res.status(200).json(post);
 });
 
 const createPost = asyncHandler(async (req, res) => {
@@ -46,5 +65,6 @@ const createPost = asyncHandler(async (req, res) => {
 
 module.exports = {
   getAllPosts,
+  getPostById,
   createPost
 }
