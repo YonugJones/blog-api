@@ -64,7 +64,7 @@ const createPost = asyncHandler(async (req, res) => {
 });
 
 const updatePost = asyncHandler(async (req, res) => {
-  const user = req.body;
+  const user = req.user;
   const postId = parseInt(req.params.id, 10);
   const { title, content } = req.body;
 
@@ -72,6 +72,8 @@ const updatePost = asyncHandler(async (req, res) => {
   if (!post) {
     throw new CustomError('Post not found', 404);
   }
+
+  console.log("Post Author ID: ", post.authorId, "Logged-in User ID: ", user.id);
 
   if (post.authorId !== user.id) {
     throw new CustomError('Unauthorized to update post', 403);
