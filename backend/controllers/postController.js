@@ -73,8 +73,6 @@ const updatePost = asyncHandler(async (req, res) => {
     throw new CustomError('Post not found', 404);
   }
 
-  console.log("Post Author ID: ", post.authorId, "Logged-in User ID: ", user.id);
-
   if (post.authorId !== user.id) {
     throw new CustomError('Unauthorized to update post', 403);
   }
@@ -87,9 +85,43 @@ const updatePost = asyncHandler(async (req, res) => {
   return res.status(200).json(updatedPost);
 });
 
+const sofDeletePost = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const postId = parseInt(req.params.id, 10);
+
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { title: true, authorId: true }
+  });
+  if (!post) {
+    throw new CustomError('Post not found', 404);
+  }
+
+  if (post.authorId !== user.id) {
+    throw new CustomError('Unauthorized to delete this post', 403);
+  }
+
+  await prisma.$transaction([
+    prisma.post.update({ where: { id: postId }, data: { isDeleted: true } }),
+    prisma.comment.updateMany({ where: { postId }, data: { isDeleted: true } })
+  ]);
+
+  const deletedPost = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { title: true, isDeleted: true }
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Post and associated comments soft deleted",
+    post: deletedPost
+  });
+});
+
 module.exports = {
   getAllPosts,
   getPostById,
   createPost,
-  updatePost
+  updatePost,
+  sofDeletePost
 }
