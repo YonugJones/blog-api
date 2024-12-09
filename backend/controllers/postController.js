@@ -63,8 +63,31 @@ const createPost = asyncHandler(async (req, res) => {
   res.status(201).json(post);
 });
 
+const updatePost = asyncHandler(async (req, res) => {
+  const user = req.body;
+  const postId = parseInt(req.params.id, 10);
+  const { title, content } = req.body;
+
+  const post = await prisma.post.findUnique({ where: { id: postId } });
+  if (!post) {
+    throw new CustomError('Post not found', 404);
+  }
+
+  if (post.authorId !== user.id) {
+    throw new CustomError('Unauthorized to update post', 403);
+  }
+
+  const updatedPost = await prisma.post.update({
+    where: { id: postId },
+    data: { title, content }
+  });
+
+  return res.status(200).json(updatedPost);
+});
+
 module.exports = {
   getAllPosts,
   getPostById,
-  createPost
+  createPost,
+  updatePost
 }
