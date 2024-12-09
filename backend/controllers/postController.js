@@ -88,6 +88,7 @@ const updatePost = asyncHandler(async (req, res) => {
 const sofDeletePost = asyncHandler(async (req, res) => {
   const user = req.user;
   const postId = parseInt(req.params.id, 10);
+  console.log(postId);
 
   const post = await prisma.post.findUnique({
     where: { id: postId },
@@ -103,7 +104,7 @@ const sofDeletePost = asyncHandler(async (req, res) => {
 
   await prisma.$transaction([
     prisma.post.update({ where: { id: postId }, data: { isDeleted: true } }),
-    prisma.comment.updateMany({ where: { postId }, data: { isDeleted: true } })
+    prisma.comment.updateMany({ where: { postId: postId }, data: { isDeleted: true } })
   ]);
 
   const deletedPost = await prisma.post.findUnique({
@@ -113,7 +114,7 @@ const sofDeletePost = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: "Post and associated comments soft deleted",
+    message: 'Post and associated comments soft deleted',
     post: deletedPost
   });
 });
