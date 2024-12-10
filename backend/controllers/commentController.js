@@ -30,6 +30,11 @@ const getPostComments = asyncHandler(async (req, res) => {
   })
 });
 
+const createComment = asyncHandler(async (req, res) => {
+  const user = req.user;
+})
+
 module.exports = {
-  getPostComments
+  getPostComments,
+  createComment
 }
