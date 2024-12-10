@@ -6,10 +6,11 @@ const getAllPosts = asyncHandler(async (req, res) => {
   const posts = await prisma.post.findMany({
     where: { isDeleted: false },
     select: {
+      id: true,
       title: true,
       content: true,
-      author: { select: { username: true }
-      },
+      createdAt: true,
+      author: { select: { id: true, username: true } },
     },
   });
 
@@ -29,9 +30,11 @@ const getPostById = asyncHandler(async (req, res) => {
   const post = await prisma.post.findUnique({
     where: { id: postId, isDeleted: false },
     select: {
+      id: true,
       title: true,
       content: true,
-      author: { select: { username: true } }
+      createdAt: true,
+      author: { select: { id: true, username: true } },
     }
   });
 
@@ -63,12 +66,12 @@ const createPost = asyncHandler(async (req, res) => {
       content,
       authorId: user.id,
     }
-  })
+  });
 
   res.status(201).json(post);
 });
 
-const updatePost = asyncHandler(async (req, res) => {
+const editPost = asyncHandler(async (req, res) => {
   const user = req.user;
   const postId = parseInt(req.params.id, 10);
   const { title, content } = req.body;
@@ -79,7 +82,7 @@ const updatePost = asyncHandler(async (req, res) => {
   }
 
   if (post.authorId !== user.id) {
-    throw new CustomError('Unauthorized to update post', 403);
+    throw new CustomError('Unauthorized to edit post', 403);
   }
 
   const updatedPost = await prisma.post.update({
@@ -132,6 +135,6 @@ module.exports = {
   getAllPosts,
   getPostById,
   createPost,
-  updatePost,
+  editPost,
   sofDeletePost
 }
