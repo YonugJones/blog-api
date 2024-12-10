@@ -1,6 +1,6 @@
 const express = require('express');
 const { getAllPosts, getPostById, createPost, updatePost, sofDeletePost } = require('../controllers/postController');
-const { getPostComments } = require('../controllers/commentController');
+const { getPostComments, createComment } = require('../controllers/commentController');
 const { authenticateToken } = require('../middleware/authMiddleware');
 const router = express.Router();
 
@@ -13,5 +13,6 @@ router.delete('/:id', authenticateToken, sofDeletePost);
 
 // Comment routes
 router.get('/:id/comments', authenticateToken, getPostComments);
+router.post('/:id/comments', authenticateToken, createComment)
 
 module.exports = router;

@@ -30,7 +30,35 @@ const getPostComments = asyncHandler(async (req, res) => {
   })
 });
 
+const createComment = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const postId = parseInt(req.params.id, 10);
+  const { content } = req.body;
+
+  const post = await prisma.post.findUnique({
+    where: { id: postId, isDeleted: false }
+  });
+  if (!post) {
+    throw new CustomError(`Post with id ${postId} not found or has been deleted`, 404);
+  }
+
+  if (!content || content.trim() === '') {
+    throw new CustomError('Comment content cannot be empty', 400);
+  }
+
+  const newComment = await prisma.comment.create({
+    data: { content, postId, userId: user.id }
+  });
+
+  res.status(201).json({
+    success: true,
+    message: 'Comment created successfully',
+    comment: newComment
+  });
+});
+
 
 module.exports = {
-  getPostComments
+  getPostComments,
+  createComment
 }
