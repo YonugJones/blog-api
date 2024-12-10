@@ -4,6 +4,7 @@ const CustomError = require('../errors/customError');
 
 const getAllPosts = asyncHandler(async (req, res) => {
   const posts = await prisma.post.findMany({
+    where: { isDeleted: false },
     select: {
       title: true,
       content: true,
@@ -16,29 +17,37 @@ const getAllPosts = asyncHandler(async (req, res) => {
     return res.status(200).json({ messsage: 'No posts found', data: [] });
   }
 
-  return res.status(200).json(posts)
+  return res.status(200).json({
+    success: true,
+    message: 'All posts retrieved',
+    posts: posts
+  })
 });
 
 const getPostById = asyncHandler(async (req, res) => {
   const postId = parseInt(req.params.id, 10);
   const post = await prisma.post.findUnique({
-    where: { id: postId },
+    where: { id: postId, isDeleted: false },
     select: {
       title: true,
       content: true,
       author: { select: { username: true } },
-      comments: { select: {
-        content: true,
-        user: { select: { username: true } }} 
-        }
+      comments: {
+        where: { isDeleted: false },
+        select: { content: true, user: { select: { username: true } } },
       }
+    }
   });
 
   if (!post) {
     throw new CustomError('Post not found', 404);
   }
 
-  return res.status(200).json(post);
+  return res.status(200).json({
+    success: true,
+    message: 'Post and associated comments retrieved',
+    post: post
+  });
 });
 
 const createPost = asyncHandler(async (req, res) => {
@@ -82,7 +91,11 @@ const updatePost = asyncHandler(async (req, res) => {
     data: { title, content }
   });
 
-  return res.status(200).json(updatedPost);
+  return res.status(200).json({
+    success: true,
+    message: 'Post updated',
+    post: updatedPost
+  });
 });
 
 const sofDeletePost = asyncHandler(async (req, res) => {
