@@ -31,11 +31,7 @@ const getPostById = asyncHandler(async (req, res) => {
     select: {
       title: true,
       content: true,
-      author: { select: { username: true } },
-      comments: {
-        where: { isDeleted: false },
-        select: { content: true, user: { select: { username: true } } },
-      }
+      author: { select: { username: true } }
     }
   });
 
@@ -45,7 +41,7 @@ const getPostById = asyncHandler(async (req, res) => {
 
   return res.status(200).json({
     success: true,
-    message: 'Post and associated comments retrieved',
+    message: 'Post retrieved',
     post: post
   });
 });
