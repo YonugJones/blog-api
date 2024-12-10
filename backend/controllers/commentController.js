@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler');
 const CustomError = require('../errors/customError');
 
 const getPostComments = asyncHandler(async (req, res) => {
-  const postId = parseInt(req.params.postId, 10);
+  const postId = parseInt(req.params.id, 10);
   const post = await prisma.post.findUnique({
     where: { id: postId, isDeleted: false }
   });
@@ -12,7 +12,7 @@ const getPostComments = asyncHandler(async (req, res) => {
   }
 
   const comments = await prisma.comment.findMany({
-    where: { postId: postId, isDeleted: false },
+    where: { postId, isDeleted: false },
     select: { 
       content: true, 
       createdAt: true, 
@@ -30,11 +30,7 @@ const getPostComments = asyncHandler(async (req, res) => {
   })
 });
 
-const createComment = asyncHandler(async (req, res) => {
-  const user = req.user;
-})
 
 module.exports = {
-  getPostComments,
-  createComment
+  getPostComments
 }
