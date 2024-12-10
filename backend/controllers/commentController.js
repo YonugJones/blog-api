@@ -91,10 +91,50 @@ const editComment = asyncHandler(async (req, res) => {
     message: 'Comment updated succesfully',
     comment: updatedComment
   });
-})
+});
+
+const likeComment = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { commentId } = req.body;
+
+  const comment = await prisma.comment.findUnique({ where: { id: commentId } });
+  if (!comment) {
+    throw new CustomError('Comment not found', 404);
+  }
+
+  const existingLike = await prisma.commentLike.findUnique({
+    where: {
+      userId_commentId: {
+        userId: user.id,
+        commentId
+      },
+    },
+  });
+
+  if (existingLike) {
+    return res.status(200).json({
+      success: false,
+      message: 'User has already liked comment'
+    });
+  }
+
+  const newLike = await prisma.commentLike.create({
+    data: {
+      userId: user.id,
+      commentId,
+    },
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Comment successfully liked',
+    like, newLike
+  });
+});
 
 module.exports = {
   getPostComments,
   createComment,
-  editComment
+  editComment,
+  likeComment
 }

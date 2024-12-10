@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String?
-  username  String    @unique
-  email     String    @unique
-  password  String
-  isAdmin   Boolean   @default(false)
-  isDeleted Boolean   @default(false)
-  posts     Post[]
-  comments  Comment[]
+  id          Int           @id @default(autoincrement())
+  name        String?
+  username    String        @unique
+  email       String        @unique
+  password    String
+  isAdmin     Boolean       @default(false)
+  isDeleted   Boolean       @default(false)
+  posts       Post[]
+  comments    Comment[]
+  CommentLike CommentLike[]
 }
 
 model Post {
@@ -37,12 +38,24 @@ model Post {
 }
 
 model Comment {
+  id          Int           @id @default(autoincrement())
+  content     String
+  createdAt   DateTime      @default(now())
+  isDeleted   Boolean       @default(false)
+  post        Post          @relation(fields: [postId], references: [id])
+  postId      Int
+  user        User          @relation(fields: [userId], references: [id])
+  userId      Int
+  CommentLike CommentLike[]
+}
+
+model CommentLike {
   id        Int      @id @default(autoincrement())
-  content   String
-  createdAt DateTime @default(now())
-  isDeleted Boolean  @default(false)
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, commentId])
 }
