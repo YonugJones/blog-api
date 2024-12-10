@@ -2,27 +2,34 @@ const prisma = require('../prisma/prismaClient');
 const asyncHandler = require('express-async-handler');
 const CustomError = require('../errors/customError');
 
-const getCommentsFromPost = asyncHandler(async (req, res) => {
-  // const postId = parseInt(req.params.id, 10);
-  // const comments = await prisma.comment.findMany({
-  //   where: { isDeleted: false },
-  //   select: {
-  //     content: true, 
-  //     user: { select: { username: true } }
-  //   }
-  // });
-  // if (comments.length === 0) {
-  //   return res.status(200).json({ messsage: 'No comments found', data: [] });
-  // }
+const getPostComments = asyncHandler(async (req, res) => {
+  const postId = parseInt(req.params.postId, 10);
+  const post = await prisma.post.findUnique({
+    where: { id: postId, isDeleted: false }
+  });
+  if (!post) {
+    throw new CustomError(`Post with id ${postId} not found or has been deleted`, 404);
+  }
 
-  // res.status(200).json({
-  //   succes: true,
-  //   message: 'All comments retrieved',
-  //   comments: comments
-  // });
-  console.log('getCommentsFromPost');
+  const comments = await prisma.comment.findMany({
+    where: { postId: postId, isDeleted: false },
+    select: { 
+      content: true, 
+      createdAt: true, 
+      user: { select: { username: true } }
+     }
+  });
+  if (comments.length === 0) {
+    return res.status(200).json({ message: 'Post has no comments', data: [] });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: `All comments from post with id ${postId} retrieved`,
+    comments
+  })
 });
 
 module.exports = {
-  getCommentsFromPost
+  getPostComments
 }
