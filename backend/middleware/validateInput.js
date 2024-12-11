@@ -32,4 +32,25 @@ const validateSignup = [
   },
 ];
 
-module.exports = { validateSignup };
+const validateLogin = [
+  body('email')
+    .notEmpty()
+    .withMessage('Email address is blank')
+    .isEmail()
+    .withMessage('Email address invalid'),
+  body('password')
+    .notEmpty()
+    .withMessage('Password required'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+    next();
+  },
+];
+
+module.exports = { 
+  validateSignup,
+  validateLogin
+};

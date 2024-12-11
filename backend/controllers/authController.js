@@ -15,7 +15,7 @@ const signup = asyncHandler(async (req, res) => {
 
   const checkEmail = await prisma.user.findUnique({ where: { email } });
   if (checkEmail) {
-    throw new CustomError('Email is taken', 409);
+    throw new CustomError('Account with provided credentials already exists', 409);
   };
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,7 +55,7 @@ const login = asyncHandler(async (req, res) => {
   const token = jwt.sign(
     { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin },
     process.env.JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: process.env.JWT_EXPIRY || '1h' }
   );
 
   res.status(200).json({
