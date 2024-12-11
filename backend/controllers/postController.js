@@ -100,7 +100,6 @@ const editPost = asyncHandler(async (req, res) => {
 const sofDeletePost = asyncHandler(async (req, res) => {
   const user = req.user;
   const postId = parseInt(req.params.id, 10);
-  console.log(postId);
 
   const post = await prisma.post.findUnique({
     where: { id: postId },

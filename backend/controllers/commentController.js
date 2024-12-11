@@ -16,6 +16,7 @@ const getPostComments = asyncHandler(async (req, res) => {
     select: { 
       id: true,
       content: true, 
+      _count: { select: { CommentLike: true } },
       createdAt: true, 
       user: { select: { id: true, username: true } },
       postId: true,
@@ -128,13 +129,42 @@ const likeComment = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Comment successfully liked',
-    like, newLike
+    like: newLike
   });
 });
+
+const softDeleteComment = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { commentId } = req.body;
+  console.log(commentId);
+
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId, isDeleted: false }
+  });
+  if (!comment) {
+    throw new CustomError('Comment not found or already deleted', 404);
+  }
+
+  if (comment.userId !== user.id) {
+    throw new CustomError('Unauthorized to delete comment', 403);
+  }
+
+  await prisma.comment.update({
+    where: { id: commentId },
+    data: { isDeleted: true }
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Comment successfully deleted',
+    comment: { id: commentId, content: comment.content, isDeleted: true }
+  });
+})
 
 module.exports = {
   getPostComments,
   createComment,
   editComment,
-  likeComment
+  likeComment,
+  softDeleteComment
 }
