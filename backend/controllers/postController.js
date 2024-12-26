@@ -74,11 +74,18 @@ const createPost = asyncHandler(async (req, res) => {
 const editPost = asyncHandler(async (req, res) => {
   const user = req.user;
   const postId = parseInt(req.params.postId, 10);
-  const { title, content } = req.body;
-
   const post = await prisma.post.findUnique({ where: { id: postId } });
+  const { title, content } = req.body;
+  if (!user) {
+    throw new CustomError('Unauthorized, user not authenticated', 401);
+  }
+
   if (!post) {
     throw new CustomError('Post not found', 404);
+  }
+
+  if (!title || !content) {
+    throw new CustomError('Post must have title and content', 400);
   }
 
   if (post.authorId !== user.id) {

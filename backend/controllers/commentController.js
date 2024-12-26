@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler');
 const CustomError = require('../errors/customError');
 
 const getPostComments = asyncHandler(async (req, res) => {
-  const postId = parseInt(req.params.id, 10);
+  const postId = parseInt(req.params.postId, 10);
   const post = await prisma.post.findUnique({
     where: { id: postId, isDeleted: false }
   });
@@ -23,7 +23,11 @@ const getPostComments = asyncHandler(async (req, res) => {
      }
   });
   if (comments.length === 0) {
-    return res.status(200).json({ message: 'Post has no comments', data: [] });
+    return res.status(200).json({
+      success: true,
+      message: 'Post has no comments', 
+      data: [] 
+    });
   }
 
   res.status(200).json({
@@ -35,7 +39,7 @@ const getPostComments = asyncHandler(async (req, res) => {
 
 const createComment = asyncHandler(async (req, res) => {
   const user = req.user;
-  const postId = parseInt(req.params.id, 10);
+  const postId = parseInt(req.params.postId, 10);
   const { content } = req.body;
 
   const post = await prisma.post.findUnique({
@@ -63,15 +67,8 @@ const createComment = asyncHandler(async (req, res) => {
 
 const editComment = asyncHandler(async (req, res) => {
   const user = req.user;
-  const postId = parseInt(req.params.id, 10);
-  const { commentId, content } = req.body;
-
-  const post = await prisma.post.findUnique({
-    where: { id: postId, isDeleted: false }
-  });
-  if (!post) {
-    throw new CustomError(`Post with id ${postId} not found or has been deleted`, 404);
-  }
+  const commentId = parseInt(req.params.commentId, 10);
+  const { content } = req.body;
 
   const comment = await prisma.comment.findUnique({ where: { id: commentId } });
   if (!comment) {
@@ -80,6 +77,10 @@ const editComment = asyncHandler(async (req, res) => {
 
   if (comment.userId !== user.id) {
     throw new CustomError('Unauthrozied to edit comment', 403);
+  }
+
+  if (!content) {
+    throw new CustomError('Content cannot be empty', 400)
   }
 
   const updatedComment = await prisma.comment.update({
@@ -96,8 +97,7 @@ const editComment = asyncHandler(async (req, res) => {
 
 const likeComment = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { commentId } = req.body;
-
+  const commentId = parseInt(req.params.commentId, 10);
   const comment = await prisma.comment.findUnique({ where: { id: commentId } });
   if (!comment) {
     throw new CustomError('Comment not found', 404);
@@ -135,8 +135,7 @@ const likeComment = asyncHandler(async (req, res) => {
 
 const softDeleteComment = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { commentId } = req.body;
-  console.log(commentId);
+  const commentId = parseInt(req.params.commentId, 10);
 
   const comment = await prisma.comment.findUnique({
     where: { id: commentId, isDeleted: false }

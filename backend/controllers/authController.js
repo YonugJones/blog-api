@@ -47,6 +47,11 @@ const login = asyncHandler(async (req, res) => {
     throw new CustomError('Incorrect email', 401);
   };
 
+  const deletedUser = await prisma.user.findUnique({ where: { email, isDeleted: true } });
+  if (deletedUser) {
+    throw new CustomError('User has been deleted. Please contact admin for assistance', 401);
+  }
+
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     throw new CustomError('Incorrect password', 401);
