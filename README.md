@@ -38,9 +38,9 @@ The project demonstrates flexibility, modularity, and enhanced security by ensur
 
 - Restricted access to authorized administrators only.
 
-## Technologies Used
+# Technologies Used
 
-# Backend
+## Backend
 
 - **Node.js** and **Express** for the server.
 
@@ -50,21 +50,33 @@ The project demonstrates flexibility, modularity, and enhanced security by ensur
 
 - **express-validator** for request validation.
 
-# Frontend
+## Frontend
  
 -  **React** for building user interfaces.
 
 -  **React Router** for navigation.
 
-# API Endspoints
+# API Endpoints
+
+## Posts
 
 | Method | Endpoint | Description | Authentication |
 | --- | --- | --- | --- |
 | GET | /posts | Fetch all blog posts | No |
-| GET | /posts/:id | Fetch a single blog posts | Yes |
+| GET | /posts/:postId | Fetch a single blog post | Yes |
 | POST | /posts | Create blog post | Yes |
-| PUT | /posts/:id | Update blog post | Yes(author) |
-| DELETE | /posts/:id | Soft delete blog post | Yes(author) |
+| PUT | /posts/:postId | Update blog post | Yes(author) |
+| DELETE | /posts/:postId | Soft delete blog post | Yes(author) |
+
+## Comments
+
+| Method | Endpoint | Description | Authentication |
+| --- | --- | --- | --- |
+| GET | /posts/:postId/comments | Fetch all comments from single blog post | Yes |
+| POST | /posts/:postId/comments | Create a comment to a blog post | Yes |
+| PUT | /posts/:postId/comments/:commentId | Update a comment to a blog post | Yes(author) |
+| POST | /posts/:postId/comments/:commentId/like | Likes a comment | Yes |
+| DELETE | /posts/:postId/comments/:commentId | Deletes a comment | Yes(author) |
 
 # Future Improvements
 - Add a search and filter feature for blog posts.
