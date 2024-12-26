@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllPosts, getPostById, createPost, editPost, sofDeletePost } = require('../controllers/postController');
+const { getAllPosts, getPostById, createPost, editPost, softDeletePost } = require('../controllers/postController');
 const { getPostComments, createComment, editComment, likeComment, softDeleteComment } = require('../controllers/commentController');
 const { authenticateToken } = require('../middleware/authMiddleware');
 const router = express.Router();
@@ -7,10 +7,10 @@ const router = express.Router();
 // blog post routes
 // /posts/
 router.get('/', getAllPosts);
-router.get('/:id', authenticateToken, getPostById);
+router.get('/:postId', authenticateToken, getPostById);
 router.post('/', authenticateToken, createPost);
-router.put('/:id', authenticateToken, editPost);
-router.delete('/:id', authenticateToken, sofDeletePost);
+router.put('/:postId', authenticateToken, editPost);
+router.delete('/:postId', authenticateToken, softDeletePost);
 
 // Comment routes
 // /posts/

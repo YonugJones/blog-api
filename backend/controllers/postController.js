@@ -26,7 +26,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
 });
 
 const getPostById = asyncHandler(async (req, res) => {
-  const postId = parseInt(req.params.id, 10);
+  const postId = parseInt(req.params.postId, 10);
   const post = await prisma.post.findUnique({
     where: { id: postId, isDeleted: false },
     select: {
@@ -73,7 +73,7 @@ const createPost = asyncHandler(async (req, res) => {
 
 const editPost = asyncHandler(async (req, res) => {
   const user = req.user;
-  const postId = parseInt(req.params.id, 10);
+  const postId = parseInt(req.params.postId, 10);
   const { title, content } = req.body;
 
   const post = await prisma.post.findUnique({ where: { id: postId } });
@@ -97,9 +97,9 @@ const editPost = asyncHandler(async (req, res) => {
   });
 });
 
-const sofDeletePost = asyncHandler(async (req, res) => {
+const softDeletePost = asyncHandler(async (req, res) => {
   const user = req.user;
-  const postId = parseInt(req.params.id, 10);
+  const postId = parseInt(req.params.postId, 10);
 
   const post = await prisma.post.findUnique({
     where: { id: postId },
@@ -135,5 +135,5 @@ module.exports = {
   getPostById,
   createPost,
   editPost,
-  sofDeletePost
+  softDeletePost
 }
