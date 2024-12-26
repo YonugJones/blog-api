@@ -5,7 +5,7 @@ const router = express.Router();
 
 // /users route
 router.get('/', authenticateToken, authorizeAdmin, userController.getAllUsers);
-router.get('/:id', authenticateToken, authorizeAdmin, userController.getUser);
-router.delete('/delete/:id', authenticateToken, authorizeAdmin, userController.softDeleteUser);
+router.get('/:userId', authenticateToken, authorizeAdmin, userController.getUser);
+router.delete('/delete/:userId', authenticateToken, authorizeAdmin, userController.softDeleteUser);
 
 module.exports = router;

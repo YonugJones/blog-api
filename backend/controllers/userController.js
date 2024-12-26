@@ -15,7 +15,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 });
 
 const getUser = asyncHandler(async (req, res) => {
-  const userId = parseInt(req.params.id, 10);
+  const userId = parseInt(req.params.userId, 10);
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, username: true, email: true, posts: true, comments: true },
@@ -29,7 +29,7 @@ const getUser = asyncHandler(async (req, res) => {
 });
 
 const softDeleteUser = asyncHandler(async (req, res) => {
-  const userId = parseInt(req.params.id, 10);
+  const userId = parseInt(req.params.userId, 10);
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, username: true, email: true },

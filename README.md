@@ -76,7 +76,20 @@ The project demonstrates flexibility, modularity, and enhanced security by ensur
 | POST | /posts/:postId/comments | Create a comment to a blog post | Yes |
 | PUT | /posts/:postId/comments/:commentId | Update a comment to a blog post | Yes(author) |
 | POST | /posts/:postId/comments/:commentId/like | Likes a comment | Yes |
-| DELETE | /posts/:postId/comments/:commentId | Deletes a comment | Yes(author) |
+| DELETE | /posts/:postId/comments/:commentId | Soft deletes a comment | Yes(author) |
+
+## Authentication
+| Method | Endpoint | Description | Authentication |
+| --- | --- | --- | --- |
+| POST | /auth/signup | Sign up user account | No |
+| POST | /auth/login | Login user account | No |
+
+## Users
+| Method | Endpoint | Description | Authentication |
+| --- | --- | --- | --- |
+| GET | /users | Fetch all users | Yes(admin) |
+| GET | /users/:userId | Fetches single user | Yes(admin) |
+| DELETE | /users/:userId | Soft deletes a user | Yes(admin) |
 
 # Future Improvements
 - Add a search and filter feature for blog posts.
