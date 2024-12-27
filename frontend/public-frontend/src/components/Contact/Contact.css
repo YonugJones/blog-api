@@ -1,0 +1,16 @@
+.contact-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-form {
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  padding: 15px;
+}

@@ -1,4 +1,5 @@
 import PostsList from '../PostsList/PostsList'
+import './Home.css'
 
 export default function Home() {
   const handleSelectPost = (postId) => {
@@ -7,8 +8,9 @@ export default function Home() {
 
   return (
     <div className='home'>
-      <h2>Welcome to my blog!</h2>
-      <p>Explore the latest posts and updates below. Click on a post to read more!</p>
+      <div className='home-header'>
+        <p>Explore the latest posts and updates below. Click on a post to read more!</p>
+      </div>
       <div className='post-list'>
         <PostsList onSelectPost={handleSelectPost}/>
       </div>

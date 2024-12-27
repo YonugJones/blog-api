@@ -1,9 +1,13 @@
+import './Contact.css'
+
 export default function Contact() {
   return (
     <div className='contact'>
-      <h2>Contact Me!</h2>
-      <p>I&apos;d love to hear from you! Feel free to reach out using the form below.</p>
-      <form>
+      <div className='contact-header'>
+        <h2>Contact Me!</h2>
+        <p>I&apos;d love to hear from you! Feel free to reach out using the form below.</p>
+      </div>
+      <form className='contact-form'>
         <label htmlFor='name'>Name:</label>
         <input type='text' id='name' name='name' placeholder='Your name' required />
 
