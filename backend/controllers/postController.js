@@ -63,6 +63,8 @@ const createPost = asyncHandler(async (req, res) => {
   }
 
   const post = await prisma.post.create({
+    success: true,
+    message: 'Post created',
     data: {
       title,
       content,

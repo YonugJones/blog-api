@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Post routes
 router.get('/', postController.getAllPosts);
-router.get('/:postId', authenticateToken, postController.getPostById);
+router.get('/:postId', postController.getPostById);
 router.post('/', authenticateToken, postController.createPost);
 router.put('/:postId', authenticateToken, postController.editPost);
 router.delete('/:postId', authenticateToken, postController.softDeletePost);

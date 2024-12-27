@@ -10,7 +10,7 @@ export default function PostsList({ onSelectPost }) {
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const posts = await fetchPosts(); // Posts array
+        const posts = await fetchPosts(); 
         setPosts(posts);
       } catch (error) {
         setError(error.message);
