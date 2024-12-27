@@ -7,8 +7,21 @@ export const fetchPosts = async () => {
       throw new Error(`Error: ${response.statusText}`)
     }
     const data = await response.json();
-    console.log('Fetched posts:', data);
     return data.posts;
+  } catch (error) {
+    console.error('Failed to fetch posts:', error);
+    throw error;
+  }
+}
+
+export const fetchPostById = async (postId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/posts/${postId}`)
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`)
+    }
+    const data = await response.json();
+    return data.post;
   } catch (error) {
     console.error('Failed to fetch posts:', error);
     throw error;
