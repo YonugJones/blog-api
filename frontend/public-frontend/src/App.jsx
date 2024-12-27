@@ -1,7 +1,15 @@
+import './layout.css';
+import Header from "./components/Header/Header.jsx"
+import Footer from "./components/Footer/Footer.jsx"
+
+
 export default function App() {
   return (
-    <div>
-      <h1>Blog Public Frontend</h1>
+    <div className="layout">
+      <Header />
+      <main>
+      </main>
+      <Footer />
     </div>
   )
 }
