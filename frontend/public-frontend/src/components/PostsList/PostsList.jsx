@@ -31,7 +31,7 @@ export default function PostsList({ onSelectPost }) {
   }, []);
 
   return (
-    <div className="posts-list">
+    <div className='posts-list'>
       {posts.map(post => (
         <PostCard key={post.id} post={post} onClick={onSelectPost} />
       ))}
