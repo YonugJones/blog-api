@@ -1,34 +1,31 @@
 import { useState, useEffect } from 'react';
-import PostCard from './PostCard';
+import PostCard from '../PostCard/PostCard';
 import './PostsList.css';
+import { fetchPosts } from '../api/api';
 
 export default function PostsList({ onSelectPost }) {
   const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Mock API call
-    const mockPosts = [
-      {
-        id: 1,
-        title: 'First Post',
-        imageUrl: 'https://via.placeholder.com/300',
-        excerpt: 'This is the first paragraph of the first post...',
-      },
-      {
-        id: 2,
-        title: 'Second Post',
-        imageUrl: 'https://via.placeholder.com/300',
-        excerpt: 'This is the first paragraph of the second post...',
-      },
-      {
-        id: 3,
-        title: 'Third Post',
-        imageUrl: 'https://via.placeholder.com/300',
-        excerpt: 'This is the first paragraph of the third post...',
+    const loadPosts = async () => {
+      try {
+        const posts = await fetchPosts();
+        setPosts(posts)
+      } catch (error) {
+        setError(error.message)
       }
-    ];
-    setPosts(mockPosts);
-  }, []);
+    }
+    loadPosts();
+  }, [])
+
+  if (error) {
+    return <div>Error: {error}</div>
+  }
+
+  if (!posts.length) {
+    return <div>Loading posts...</div>
+  }
 
   return (
     <div className='posts-list'>
@@ -36,5 +33,5 @@ export default function PostsList({ onSelectPost }) {
         <PostCard key={post.id} post={post} onClick={onSelectPost} />
       ))}
     </div>
-  );
+  )
 }
