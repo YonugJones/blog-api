@@ -3,6 +3,7 @@ import App from './App';
 import Home from './components/Home/Home';
 import About from './components/About/About';
 import Contact from './components/Contact/Contact';
+import PostDetails from './components/PostDetails/PostDetails';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: '/contact',
         element: <Contact />
+      },
+      {
+        path: '/posts/:postId',
+        element: <PostDetails />
       }
     ]
   }
