@@ -1,3 +1,5 @@
+import './PostCard.css';
+
 export default function PostCard({ post, onClick }) {
   return (
     <div className='post-card' onClick={() => onClick(post.id)}>

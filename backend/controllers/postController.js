@@ -9,6 +9,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
       id: true,
       title: true,
       content: true,
+      imageUrl: true,
       createdAt: true,
       author: { select: { id: true, username: true } },
     },
@@ -33,6 +34,7 @@ const getPostById = asyncHandler(async (req, res) => {
       id: true,
       title: true,
       content: true,
+      imageUrl: true,
       createdAt: true,
       author: { select: { id: true, username: true } },
     }
