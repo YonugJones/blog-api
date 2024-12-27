@@ -30,8 +30,8 @@ export default function PostDetails() {
 
   return (
     <div className='post-details'>
-      <h1>{post.title}</h1>
       <img src={post.imageUrl} alt={post.title} className='post-image'/>
+      <h1>{post.title}</h1>
       <p>{post.content}</p>
       <p>Author: {post.author.username}</p>
       <p>Published: {new Date(post.createdAt).toLocaleString()}</p>

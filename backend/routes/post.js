@@ -12,7 +12,7 @@ router.put('/:postId', authenticateToken, postController.editPost);
 router.delete('/:postId', authenticateToken, postController.softDeletePost);
 
 // Comment routes nested under Posts
-router.get('/:postId/comments', authenticateToken, commentController.getPostComments);
+router.get('/:postId/comments', /* authenticateToken, */ commentController.getPostComments);
 router.post('/:postId/comments', authenticateToken, commentController.createComment);
 router.put('/:postId/comments/:commentId', authenticateToken, commentController.editComment);
 router.post('/:postId/comments/:commentId/like', authenticateToken, commentController.likeComment);
