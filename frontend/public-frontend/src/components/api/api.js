@@ -6,8 +6,9 @@ export const fetchPosts = async () => {
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`)
     }
-    const posts = await response.json();
-    return posts;
+    const data = await response.json();
+    console.log('Fetched posts:', data);
+    return data.posts;
   } catch (error) {
     console.error('Failed to fetch posts:', error);
     throw error;

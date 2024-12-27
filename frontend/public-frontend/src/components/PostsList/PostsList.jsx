@@ -10,21 +10,21 @@ export default function PostsList({ onSelectPost }) {
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const posts = await fetchPosts();
-        setPosts(posts)
+        const posts = await fetchPosts(); // Posts array
+        setPosts(posts);
       } catch (error) {
-        setError(error.message)
+        setError(error.message);
       }
-    }
+    };
     loadPosts();
-  }, [])
+  }, []);
 
   if (error) {
-    return <div>Error: {error}</div>
+    return <div>Error: {error}</div>;
   }
 
   if (!posts.length) {
-    return <div>Loading posts...</div>
+    return <div>Loading posts...</div>;
   }
 
   return (
@@ -33,5 +33,5 @@ export default function PostsList({ onSelectPost }) {
         <PostCard key={post.id} post={post} onClick={onSelectPost} />
       ))}
     </div>
-  )
+  );
 }
