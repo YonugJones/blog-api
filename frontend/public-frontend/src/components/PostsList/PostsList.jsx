@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import PostCard from '../PostCard/PostCard';
 import './PostsList.css';
-import { fetchPosts } from '../api/api';
+import { fetchPosts, fetchCommentsByPostId } from '../api/api';
 
-export default function PostsList({ onSelectPost }) {
+export default function PostsList() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
 
@@ -27,10 +27,12 @@ export default function PostsList({ onSelectPost }) {
     return <div>Loading posts...</div>;
   }
 
+
+
   return (
     <div className='posts-list'>
       {posts.map(post => (
-        <PostCard key={post.id} post={post} onClick={onSelectPost} />
+        <PostCard key={post.id} post={post} />
       ))}
     </div>
   );

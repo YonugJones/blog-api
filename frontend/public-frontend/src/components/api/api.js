@@ -28,7 +28,7 @@ export const fetchPostById = async (postId) => {
   }
 }
 
-export const fetchComments = async (postId) => {
+export const fetchCommentsByPostId = async (postId) => {
   try {
     const response = await fetch(`${BASE_URL}/posts/${postId}/comments`)
     if (!response.ok) {
