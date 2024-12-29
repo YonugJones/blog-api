@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPostById } from '../api/api';
+import CommentsList from '../CommentsList/CommentsList';
 import './PostDetails.css';
 
 export default function PostDetails() {
@@ -31,10 +32,12 @@ export default function PostDetails() {
   return (
     <div className='post-details'>
       <img src={post.imageUrl} alt={post.title} className='post-image'/>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-      <p>Author: {post.author.username}</p>
-      <p>Published: {new Date(post.createdAt).toLocaleString()}</p>
+      <h1 className='post-title'>{post.title}</h1>
+      <p className='post-content'>{post.content}</p>
+      <p className='post-author'>Author: {post.author.username}</p>
+      <p className='post-published'>Published: {new Date(post.createdAt).toLocaleString()}</p>
+      <h2>Comments</h2>
+      <CommentsList />
     </div>
   )
 }

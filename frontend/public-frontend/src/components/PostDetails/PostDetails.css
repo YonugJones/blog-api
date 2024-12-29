@@ -1,6 +1,11 @@
 .post-details {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px 0 10px 0;
+  margin: 10px;
 }

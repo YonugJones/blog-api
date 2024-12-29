@@ -1,0 +1,24 @@
+.comment {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px 30px;
+  margin: 10px;
+}
+
+.comment-top {
+  display: flex;
+}
+
+.comment-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-likes {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
