@@ -5,6 +5,7 @@ import About from './components/About/About';
 import Contact from './components/Contact/Contact';
 import PostDetails from './components/PostDetails/PostDetails';
 import ErrorPage from './components/ErrorPage/ErrorPage';
+import Signup from './components/Signup/Signup';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,8 @@ const router = createBrowserRouter([
       { path: '/about', element: <About /> },
       { path: '/contact', element: <Contact /> },
       { path: '/posts', element: <Home /> },
-      { path: '/posts/:postId', element: <PostDetails /> }
+      { path: '/posts/:postId', element: <PostDetails /> },
+      { path: '/signup', element: <Signup /> }
     ]
   }
 ])

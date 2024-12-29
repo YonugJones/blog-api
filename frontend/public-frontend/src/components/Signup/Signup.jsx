@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { signup } from '../../api/api';
+import './Signup.css';
 
 export default function Signup() {
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '' });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -15,23 +16,23 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e) => {
+    console.log(`handleSubmit function run. formdata: ${formData}`); // handleSubmit function run. formdata: [object Object]
     e.preventDefault();
     setMessage('');
     setError('');
 
     try {
       const response = await signup(formData);
-      setMessage(response.message || 'Signup sucessful. You can now login.')
+      console.log(response);
+      setMessage(response.message || 'Signup successful. You can now login.')
     } catch (error) {
       setError(error.message || 'Signup failed. Please try again.')
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='signup-form' onSubmit={handleSubmit}>
       <h2>Signup</h2>
-      {message && <p className='success'>{message}</p>}
-      {error && <p className='error'>{error}</p>}
       <label>
         Username:
         <input 
@@ -62,7 +63,19 @@ export default function Signup() {
           required
         />
       </label>
+      <label>
+        Confirm Password:
+        <input 
+          type='password'
+          name='confirmPassword'
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+      </label>
       <button type='submit'>Signup</button>
+      {message && <p className='success'>{message}</p>}
+      {error && <p className='error'>{error}</p>}
     </form>
   )
 }

@@ -8,9 +8,6 @@ export default function Home() {
 
   return (
     <div className='home'>
-      <div className='home-header'>
-        <p>Explore the latest posts and updates below. Click on a post to read more!</p>
-      </div>
       <div className='post-list'>
         <PostsList onSelectPost={handleSelectPost}/>
       </div>

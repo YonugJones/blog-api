@@ -1,17 +1,19 @@
 const BASE_URL = 'http://localhost:3000';
 
-export const signup = async (userData) => {
+export const signup = async (formData) => {
   try {
     const response = await fetch(`${BASE_URL}/auth/signup`, {
       method: 'POST',
-      header: {
+      headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(formData)
     })
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+      const errorData = await response.json();
+      console.error('Error response:', errorData); 
+      throw new Error(errorData.message || 'Signup failed');
     }
 
     const data = await response.json();
