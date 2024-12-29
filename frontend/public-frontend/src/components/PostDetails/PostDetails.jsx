@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPostById } from '../api/api';
+import { fetchPostById } from '../../api/api';
 import CommentsList from '../CommentsList/CommentsList';
 import './PostDetails.css';
 
@@ -36,7 +36,10 @@ export default function PostDetails() {
       <p className='post-content'>{post.content}</p>
       <p className='post-author'>Author: {post.author.username}</p>
       <p className='post-published'>Published: {new Date(post.createdAt).toLocaleString()}</p>
-      <h2>Comments</h2>
+      <div className='comments-header'>
+        <h2>Comments</h2>
+        <button>Add comment</button>
+      </div>
       <CommentsList />
     </div>
   )

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PostCard from '../PostCard/PostCard';
 import './PostsList.css';
-import { fetchPosts, fetchCommentsByPostId } from '../api/api';
+import { fetchPosts } from '../../api/api';
 
 export default function PostsList() {
   const [posts, setPosts] = useState([]);
@@ -26,8 +26,6 @@ export default function PostsList() {
   if (!posts.length) {
     return <div>Loading posts...</div>;
   }
-
-
 
   return (
     <div className='posts-list'>

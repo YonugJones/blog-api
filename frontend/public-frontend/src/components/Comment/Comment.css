@@ -10,6 +10,10 @@
   display: flex;
 }
 
+.comment-author {
+  margin-right: 10px;
+}
+
 .comment-bottom {
   display: flex;
   justify-content: space-between;

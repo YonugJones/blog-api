@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchCommentsByPostId } from '../api/api';
+import { fetchCommentsByPostId } from '../../api/api';
 import Comment from '../Comment/Comment';
 import './CommentsList.css';
 
@@ -26,12 +26,9 @@ export default function CommentsList() {
   }
 
   if (!comments) {
-    return <div>Loading comments...</div>;
-  }
-
-  if (!comments.length) {
     return <div>No comments yet. Be the first to leave a comment!</div>;
   }
+
 
   return (
     <div className='comments-list'>

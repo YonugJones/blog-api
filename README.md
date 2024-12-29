@@ -96,9 +96,7 @@ The project demonstrates flexibility, modularity, and enhanced security by ensur
 
 - Implement pagination for large datasets.
 
-- Enhance UI with animations and responsive design.
-
-- Deploy the application to platforms like Heroku or Vercel.
+- Enhance UI with animations responsive design, and better styling.
 
 # License
 

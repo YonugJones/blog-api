@@ -4,7 +4,7 @@ export default function Comment({ comment }) {
   return (
     <div className='comment'>
       <div className='comment-top'>
-        <p className='comment-author'>Author: {comment.user.username}</p>
+        <p className='comment-author'>{comment.user.username}</p>
         <p className='comment-date'>{new Date(comment.createdAt).toLocaleString()}</p>
       </div>
       <div className='comment-bottom'>
