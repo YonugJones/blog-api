@@ -31,3 +31,5 @@ export const fetchPostById = (postId) =>
   apiClient.get(`/posts/${postId}`).then((res) => res.data.post)
 export const fetchCommentsByPostId = (postId) =>
   apiClient.get(`/posts/${postId}/comments`).then((res) => res.data.comments)
+export const createComment = (postId, commentData) => 
+  apiClient.post(`/posts/${postId}/comments`, commentData).then((res) => res.data)

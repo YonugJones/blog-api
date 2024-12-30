@@ -56,6 +56,8 @@ The project demonstrates flexibility, modularity, and enhanced security by ensur
 
 -  **React Router** for navigation.
 
+- **Axios** for for cleaner API fetching
+
 # API Endpoints
 
 ## Posts
