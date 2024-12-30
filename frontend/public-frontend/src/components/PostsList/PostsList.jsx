@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PostCard from '../PostCard/PostCard';
 import './PostsList.css';
-import { fetchPosts } from '../../api/api';
+import { fetchPosts } from '../../api/apiOLD';
 
 export default function PostsList() {
   const [posts, setPosts] = useState([]);

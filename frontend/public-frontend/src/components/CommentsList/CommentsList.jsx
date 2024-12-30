@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchCommentsByPostId } from '../../api/api';
+import { fetchCommentsByPostId } from '../../api/apiOLD';
 import Comment from '../Comment/Comment';
 import './CommentsList.css';
 
