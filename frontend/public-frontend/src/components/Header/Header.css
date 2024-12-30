@@ -9,14 +9,19 @@
   margin: 0;
 }
 
-.nav-links a {
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-links a, .auth-links a {
 
   list-style: none; 
   padding: 0; 
   margin: 0; 
 }
 
-.nav-links a {
+.nav-links a, .auth-links a {
   text-decoration: none; 
   color: inherit; 
 }

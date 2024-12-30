@@ -19,7 +19,31 @@ export const signup = async (formData) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Sign-up failed:', error);
+    console.error('Signup failed:', error.error);
+    throw error;
+  }
+}
+
+export const login = async (credentials) => {
+  try {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+    }) 
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error response:', errorData);
+      throw new Error(errorData.message || 'Signup failed');
+    }
+
+    const data = await response.json();
+    return data
+  } catch (error) {
+    console.error('Login failed:', error.error);
     throw error;
   }
 }

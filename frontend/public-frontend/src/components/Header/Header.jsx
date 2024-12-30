@@ -10,6 +10,8 @@ export default function Header() {
           <Link className='home-link' to='/'>Home</Link>
           <Link className='about-link' to='/about'>About</Link>
           <Link className='contact-link' to='/contact'>Contact</Link>
+        </ul>
+        <ul className='auth-links'>
           <Link className='signup-link' to='/signup'>Signup</Link>
         </ul>
       </nav>

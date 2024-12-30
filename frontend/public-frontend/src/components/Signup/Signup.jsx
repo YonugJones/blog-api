@@ -16,14 +16,12 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e) => {
-    console.log(`handleSubmit function run. formdata: ${formData}`); // handleSubmit function run. formdata: [object Object]
     e.preventDefault();
     setMessage('');
     setError('');
 
     try {
       const response = await signup(formData);
-      console.log(response);
       setMessage(response.message || 'Signup successful. You can now login.')
     } catch (error) {
       setError(error.message || 'Signup failed. Please try again.')
