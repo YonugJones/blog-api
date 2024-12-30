@@ -6,6 +6,7 @@ import Contact from './components/Contact/Contact';
 import PostDetails from './components/PostDetails/PostDetails';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import Signup from './components/Signup/Signup';
+import Login from './components/Login/Login';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
       { path: '/contact', element: <Contact /> },
       { path: '/posts', element: <Home /> },
       { path: '/posts/:postId', element: <PostDetails /> },
-      { path: '/signup', element: <Signup /> }
+      { path: '/signup', element: <Signup /> }, 
+      { path: '/login', element: <Login /> }
     ]
   }
 ])
