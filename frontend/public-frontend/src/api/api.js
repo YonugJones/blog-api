@@ -48,6 +48,11 @@ export const login = async (credentials) => {
   }
 }
 
+export const logout = () => {
+  localStorage.removeItem('token');
+  window.location.reload();
+}
+
 export const fetchPosts = async () => {
   try {
     const response = await fetch(`${BASE_URL}/posts`);
@@ -78,7 +83,14 @@ export const fetchPostById = async (postId) => {
 
 export const fetchCommentsByPostId = async (postId) => {
   try {
-    const response = await fetch(`${BASE_URL}/posts/${postId}/comments`)
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${BASE_URL}/posts/${postId}/comments`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`)
     }

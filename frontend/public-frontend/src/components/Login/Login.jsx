@@ -22,8 +22,9 @@ export default function Login() {
 
     try {
       const response = await login(credentials);
-      setMessage(`Welcome back ${response.username}`);
+      setMessage(`Welcome back ${response.user.username}`);
       localStorage.setItem('token', response.token)
+      
     } catch (error) {
       setError(error.message || 'Login failed. Please try again');
     }

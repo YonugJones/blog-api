@@ -65,8 +65,9 @@ const login = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Logged in successfully',
+    message: `Welcome back ${user.username}`,
     token,
+    user: { username: user.username, email: user.email }
   })
 });
 
