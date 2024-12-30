@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signup } from '../../api/apiOLD';
+import { signup } from '../../api/api';
 import './Signup.css';
 
 export default function Signup() {
