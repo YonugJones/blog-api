@@ -13,6 +13,7 @@ export default function Header() {
         </ul>
         <ul className='auth-links'>
           <Link className='signup-link' to='/signup'>Signup</Link>
+          <Link className='signup-link' to='/login'>Login</Link>
         </ul>
       </nav>
     </header>
