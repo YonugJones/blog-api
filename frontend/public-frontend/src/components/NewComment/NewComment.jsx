@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createComment } from '../../api/api';
 import './NewComment.css';
 
-export default function NewComment({ postId }) {
+export default function NewComment({ postId, onCommentAdded }) {
   const [commentData, setCommentData] = useState({ content: '' })
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -24,6 +24,7 @@ export default function NewComment({ postId }) {
       const response = await createComment(postId, commentData);
       setMessage(response.message || 'Comment created.')
       setCommentData({ content: '' });
+      onCommentAdded(response);
     } catch (error) {
       setError(error.response?.data?.message|| 'Comment creation failed. Please try again')
     }

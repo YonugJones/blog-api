@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+
 import App from './App';
 import Home from './components/Home/Home';
 import About from './components/About/About';
@@ -26,3 +27,33 @@ const router = createBrowserRouter([
 ])
 
 export default router;
+
+
+/*
+  import { lazy, Suspense } from 'react';
+import { createBrowserRouter } from 'react-router-dom';
+
+const App = lazy(() => import('./App'));
+const Home = lazy(() => import('./components/Home/Home'));
+const About = lazy(() => import('./components/About/About'));
+const Login = lazy(() => import('./components/Login/Login'));
+// Add other routes similarly
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <App />
+      </Suspense>
+    ),
+    children: [
+      { path: '/', element: <Home /> },
+      { path: '/about', element: <About /> },
+      { path: '/login', element: <Login /> },
+    ],
+  },
+]);
+
+export default router;
+*/
