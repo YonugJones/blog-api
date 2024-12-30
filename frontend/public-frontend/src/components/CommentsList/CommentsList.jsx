@@ -1,34 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchCommentsByPostId } from '../../api/api';
+
 import Comment from '../Comment/Comment';
 import './CommentsList.css';
 
-export default function CommentsList() {
-  const { postId } = useParams();
-  const [comments, setComments] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadComments = async () => {
-      try {
-        const fetchedComments = await fetchCommentsByPostId(postId);
-        setComments(fetchedComments);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-    loadComments(); 
-  }, [postId]);
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!comments) {
+export default function CommentsList({ comments }) {
+  if (!comments.length) {
     return <div>No comments yet. Be the first to leave a comment!</div>;
   }
-
 
   return (
     <div className='comments-list'>

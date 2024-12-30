@@ -24,7 +24,7 @@ export default function NewComment({ postId, onCommentAdded }) {
       const response = await createComment(postId, commentData);
       setMessage(response.message || 'Comment created.')
       setCommentData({ content: '' });
-      onCommentAdded(response);
+      onCommentAdded(response.comment);
     } catch (error) {
       setError(error.response?.data?.message|| 'Comment creation failed. Please try again')
     }

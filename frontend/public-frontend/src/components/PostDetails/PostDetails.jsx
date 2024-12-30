@@ -18,7 +18,7 @@ export default function PostDetails() {
         setPost(fetchedPost)
       } catch (error) {
         setError(error.message)
-      }
+      } 
     };
     loadPost()
   }, [postId]);
@@ -31,7 +31,7 @@ export default function PostDetails() {
       } catch (error) {
         console.error('Error loading comments', error)
       }
-    }
+    };
     loadComments();
   }, [postId]);
 
@@ -57,7 +57,7 @@ export default function PostDetails() {
       <div className='comments-header'>
         <h2>Comments</h2>
       </div>
-      <CommentsList postId={postId} comments={comments} />
+      <CommentsList comments={comments} />
       <NewComment postId={postId} onCommentAdded={handleNewComment} />
     </div>
   )
