@@ -1,4 +1,3 @@
-
 import Comment from '../Comment/Comment';
 import './CommentsList.css';
 

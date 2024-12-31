@@ -4,7 +4,7 @@ import { CommentsContext } from '../../context/CommentsContext';
 import './NewComment.css';
 
 export default function NewComment({ postId }) {
-  const [commentData, setCommentData] = useState({ content: '' })
+  const [commentData, setCommentData] = useState({ content: '' }); // potential issue with error page displayed after adding comment
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const { addComment } = useContext(CommentsContext);
@@ -14,8 +14,8 @@ export default function NewComment({ postId }) {
     setCommentData((prevData) => ({
       ...prevData,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,13 +24,13 @@ export default function NewComment({ postId }) {
 
     try {
       const response = await createComment(postId, commentData);
-      setMessage(response.message || 'Comment created.')
+      setMessage(response.message || 'Comment created.');
       setCommentData({ content: '' });
       addComment(response.comment);
     } catch (error) {
-      setError(error.response?.data?.message|| 'Comment creation failed. Please try again')
+      setError(error.response?.data?.message || 'Comment creation failed. Please try again');
     }
-  }
+  };
 
   return (
     <form className='new-comment-form' onSubmit={handleSubmit}>
@@ -48,5 +48,5 @@ export default function NewComment({ postId }) {
       {message && <p className='success'>{message}</p>}
       {error && <p className='error'>{error}</p>}
     </form>
-  )
+  );
 }

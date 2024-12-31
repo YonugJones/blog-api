@@ -8,7 +8,7 @@ export const CommentsProvider = ({ children }) => {
 
   const addComment = (newComment) => {
     setComments((prevComments) => [...prevComments, newComment]);
-  };
+  }; 
 
   return (
     <CommentsContext.Provider value={{ comments, setComments, addComment }}>

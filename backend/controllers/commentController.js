@@ -58,10 +58,23 @@ const createComment = asyncHandler(async (req, res) => {
     include: { user: { select: { username: true } } }
   });
 
+  const enrichedComment = await prisma.comment.findUnique({
+    where: { id: newComment.id },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      isDeleted: true,
+      postId: true,
+      user: { select: { id: true, username: true } },
+      _count: { select: { CommentLike: true } },
+    },
+  });
+
   res.status(201).json({
     success: true,
     message: 'Comment created successfully',
-    comment: newComment
+    comment: enrichedComment
   });
 });
 
