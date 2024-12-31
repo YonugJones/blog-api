@@ -13,6 +13,7 @@ const getPostComments = asyncHandler(async (req, res) => {
 
   const comments = await prisma.comment.findMany({
     where: { postId, isDeleted: false },
+    orderBy: { id: 'desc' },
     select: { 
       id: true,
       content: true, 
