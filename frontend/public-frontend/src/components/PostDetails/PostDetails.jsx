@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchCommentsByPostId, fetchPostById } from '../../api/api';
+import { fetchPostById, fetchCommentsByPostId } from '../../api/api';
 import CommentsList from '../CommentsList/CommentsList';
 import NewComment from '../NewComment/NewComment';
+import { CommentsContext } from '../../context/CommentsContext';
 import './PostDetails.css';
 
 export default function PostDetails() {
   const { postId } = useParams();
+  const { comments, setComments, addComment } = useContext(CommentsContext);
   const [post, setPost] = useState(null);
-  const [comments, setComments] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function PostDetails() {
       }
     };
     loadComments();
-  }, [postId]);
+  }, [postId, setComments]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -42,10 +43,6 @@ export default function PostDetails() {
   if (!post) {
     return <div>Loading post...</div>;
   }
-
-  const handleNewComment = (newComment) => {
-    setComments((prevComments) => [...prevComments, newComment])
-  };
 
   return (
     <div className='post-details'>
@@ -58,7 +55,7 @@ export default function PostDetails() {
         <h2>Comments</h2>
       </div>
       <CommentsList comments={comments} />
-      <NewComment postId={postId} onCommentAdded={handleNewComment} />
+      <NewComment postId={postId} onCommentAdded={addComment} />
     </div>
   )
 }
