@@ -10,7 +10,8 @@ export default function PostDetails() {
   const { postId } = useParams();
   const { comments, setComments, addComment } = useContext(CommentsContext);
   const [post, setPost] = useState(null);
-  const [error, setError] = useState(null);
+  const [postError, setPostError] = useState(null);
+  const [commentsError, setCommentsError] = useState(null);
 
   useEffect(() => {
     const loadPost = async () => {
@@ -18,7 +19,7 @@ export default function PostDetails() {
         const fetchedPost = await fetchPostById(postId);
         setPost(fetchedPost)
       } catch (error) {
-        setError(error.message)
+        setPostError(error.message)
       } 
     };
     loadPost()
@@ -30,14 +31,14 @@ export default function PostDetails() {
         const fetchedComments = await fetchCommentsByPostId(postId);
         setComments(fetchedComments);
       } catch (error) {
-        console.error('Error loading comments', error)
+        setCommentsError(error.message);
       }
     };
     loadComments();
   }, [postId, setComments]);
 
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (postError) {
+    return <div>Error loading post: {[postError]}</div>;
   }
 
   if (!post) {
@@ -54,7 +55,11 @@ export default function PostDetails() {
       <div className='comments-header'>
         <h2>Comments</h2>
       </div>
-      <CommentsList comments={comments} />
+      {commentsError ? (
+        <div>Error loading comments: {commentsError}</div>
+      ) : (
+        <CommentsList comments={comments} />
+      )}
       <NewComment postId={postId} onCommentAdded={addComment} />
     </div>
   )
