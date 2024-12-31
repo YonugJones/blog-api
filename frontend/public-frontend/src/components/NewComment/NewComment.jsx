@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { createComment } from '../../api/api';
+import { CommentsContext } from '../../context/CommentsContext';
 import './NewComment.css';
 
-export default function NewComment({ postId, onCommentAdded }) {
+export default function NewComment({ postId }) {
   const [commentData, setCommentData] = useState({ content: '' })
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const { addComment } = useContext(CommentsContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +26,7 @@ export default function NewComment({ postId, onCommentAdded }) {
       const response = await createComment(postId, commentData);
       setMessage(response.message || 'Comment created.')
       setCommentData({ content: '' });
-      onCommentAdded(response.comment);
+      addComment(response.comment);
     } catch (error) {
       setError(error.response?.data?.message|| 'Comment creation failed. Please try again')
     }
