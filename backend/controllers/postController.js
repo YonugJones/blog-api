@@ -5,6 +5,7 @@ const CustomError = require('../errors/customError');
 const getAllPosts = asyncHandler(async (req, res) => {
   const posts = await prisma.post.findMany({
     where: { isDeleted: false },
+    orderBy: { id: 'desc' },
     select: {
       id: true,
       title: true,

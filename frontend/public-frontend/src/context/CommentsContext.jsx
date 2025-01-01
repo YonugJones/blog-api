@@ -11,9 +11,9 @@ export const CommentsProvider = ({ children }) => {
     setComments((prevComments) => [...prevComments, newComment]);
   }; 
 
-  const likeComment = async (commentId) => {
+  const likeComment = async (postId, commentId) => {
     try {
-      const updatedComment = await apiLikeComment(commentId);
+      const updatedComment = await apiLikeComment(postId, commentId);
       setComments((prevComments) =>
         prevComments.map((comment) =>
           comment.id === commentId ? updatedComment : comment

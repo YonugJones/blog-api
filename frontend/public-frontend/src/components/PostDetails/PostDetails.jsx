@@ -62,7 +62,7 @@ export default function PostDetails() {
       {commentsError ? (
         <div>Error loading comments: {commentsError}</div>
       ) : (
-        <CommentsList comments={comments} />
+        <CommentsList postId={postId} comments={comments} />
       )}
       <NewComment postId={postId} onCommentAdded={addComment} />
     </div>

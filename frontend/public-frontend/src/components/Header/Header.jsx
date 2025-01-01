@@ -13,13 +13,13 @@ export default function Header() {
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
-        </ul>
+        </ul> 
         <ul className="auth-links">
           {isLoggedIn ? (
             <button onClick={logout}>Logout</button>
           ) : (
             <>
-              <button><Link to="/login">Login</Link></button>
+              <button><Link to='/login'>Login</Link></button>
               <button><Link to='/signup'>Signup</Link></button>
             </>
           )}

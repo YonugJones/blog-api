@@ -4,7 +4,7 @@ import { CommentsContext } from '../../context/CommentsContext';
 import './NewComment.css';
 
 export default function NewComment({ postId }) {
-  const [commentData, setCommentData] = useState({ content: '' }); // potential issue with error page displayed after adding comment
+  const [commentData, setCommentData] = useState({ content: '' });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const { addComment } = useContext(CommentsContext);
@@ -44,7 +44,7 @@ export default function NewComment({ postId }) {
           required
         />
       </label>
-      <button type='submit'>Add</button>
+      <button type='submit'>Add Comment</button>
       {message && <p className='success'>{message}</p>}
       {error && <p className='error'>{error}</p>}
     </form>

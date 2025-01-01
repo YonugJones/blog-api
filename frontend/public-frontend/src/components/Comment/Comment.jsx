@@ -2,11 +2,11 @@ import { useContext } from 'react';
 import { CommentsContext } from '../../context/CommentsContext';
 import './Comment.css';
 
-export default function Comment({ comment }) {
+export default function Comment({ postId, comment }) {
   const { likeComment } = useContext(CommentsContext);
 
   const handleLike = () => {
-    likeComment(comment.id);
+    likeComment(postId, comment.id);
   }
 
   return (
@@ -25,3 +25,4 @@ export default function Comment({ comment }) {
     </div>
   )
 }
+

@@ -20,7 +20,7 @@ const getPostComments = asyncHandler(async (req, res) => {
       _count: { select: { CommentLike: true } },
       createdAt: true, 
       user: { select: { id: true, username: true } },
-      postId: true,
+      postId: true
      }
   });
   if (comments.length === 0) {
@@ -90,11 +90,11 @@ const editComment = asyncHandler(async (req, res) => {
   }
 
   if (comment.userId !== user.id) {
-    throw new CustomError('Unauthrozied to edit comment', 403);
+    throw new CustomError('Unauthorized to edit comment', 403);
   }
 
   if (!content) {
-    throw new CustomError('Content cannot be empty', 400)
+    throw new CustomError('Content cannot be empty', 400);
   }
 
   const updatedComment = await prisma.comment.update({
@@ -104,7 +104,7 @@ const editComment = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Comment updated succesfully',
+    message: 'Comment updated successfully',
     comment: updatedComment
   });
 });
@@ -112,7 +112,20 @@ const editComment = asyncHandler(async (req, res) => {
 const likeComment = asyncHandler(async (req, res) => {
   const user = req.user;
   const commentId = parseInt(req.params.commentId, 10);
-  const comment = await prisma.comment.findUnique({ where: { id: commentId } });
+
+  if (isNaN(commentId)) {
+    throw new CustomError('Invalid comment ID', 400);
+  }
+
+  const comment = await prisma.comment.findUnique({ 
+    where: { 
+      id: commentId 
+    },
+    include: {
+      user: true,
+    }
+  });
+
   if (!comment) {
     throw new CustomError('Comment not found', 404);
   }
@@ -121,7 +134,7 @@ const likeComment = asyncHandler(async (req, res) => {
     where: {
       userId_commentId: {
         userId: user.id,
-        commentId
+        commentId 
       },
     },
   });
@@ -133,17 +146,29 @@ const likeComment = asyncHandler(async (req, res) => {
     });
   }
 
-  const newLike = await prisma.commentLike.create({
+  await prisma.commentLike.create({
     data: {
       userId: user.id,
       commentId,
     },
   });
 
+  const updatedComment = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+    include: {
+      user: true,
+      _count: {
+        select: { CommentLike: true },
+      },
+    },
+  });
+
   res.status(200).json({
     success: true,
     message: 'Comment successfully liked',
-    like: newLike
+    comment: updatedComment,
   });
 });
 
@@ -170,7 +195,7 @@ const softDeleteComment = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Comment successfully deleted',
-    comment: { id: commentId, content: comment.content, isDeleted: true }
+    comment: { id: commentId, content: comment.content, isDeleted: true, userId: comment.userId }
   });
 })
 
