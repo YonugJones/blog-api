@@ -172,6 +172,46 @@ const likeComment = asyncHandler(async (req, res) => {
   });
 });
 
+const unlikeComment = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const commentId = parseInt(req.params.commentId, 10);
+
+  if (isNaN(commentId)) {
+    throw new CustomError('Invalid comment ID', 400);
+  }
+
+  const existingLike = await prisma.commentLike.findUnique({
+    where: {
+      userId_commentId: {
+        userId: user.id,
+        commentId
+      },
+    },
+  });
+
+  if (!existingLike) {
+    return res.status(200).json({
+      success: false,
+      message: 'User has not liked this comment',
+    });
+  }
+
+  await prisma.commentLike.delete({
+    where: {
+      userId_commentId: {
+        userId: user.id,
+        commentId,
+      },
+    },
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Comment successfully unliked',
+    comment: updatedComment
+  });
+});
+
 const softDeleteComment = asyncHandler(async (req, res) => {
   const user = req.user;
   const commentId = parseInt(req.params.commentId, 10);
@@ -204,5 +244,6 @@ module.exports = {
   createComment,
   editComment,
   likeComment,
+  unlikeComment,
   softDeleteComment
 }
