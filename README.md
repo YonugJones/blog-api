@@ -78,6 +78,7 @@ The project demonstrates flexibility, modularity, and enhanced security by ensur
 | POST | /posts/:postId/comments | Create a comment to a blog post | Yes |
 | PUT | /posts/:postId/comments/:commentId | Update a comment to a blog post | Yes(author) |
 | POST | /posts/:postId/comments/:commentId/like | Likes a comment | Yes |
+| POST | /posts/:postId/comments/:commentId/unlike | Unlikes a comment | Yes |
 | DELETE | /posts/:postId/comments/:commentId | Soft deletes a comment | Yes(author) |
 
 ## Authentication
