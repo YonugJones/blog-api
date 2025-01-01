@@ -33,3 +33,5 @@ export const fetchCommentsByPostId = (postId) =>
   apiClient.get(`/posts/${postId}/comments`).then((res) => res.data.comments)
 export const createComment = (postId, commentData) => 
   apiClient.post(`/posts/${postId}/comments`, commentData).then((res) => res.data)
+export const likeComment = (postId, commentId) =>
+  apiClient.post(`posts/${postId}/comments/${commentId}/like`).then((res) => res.data)
