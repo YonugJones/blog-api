@@ -10,9 +10,12 @@ export function AuthProvider({ children }) {
     setIsLoggedIn(!!token);
   }, []);
 
-  const login = (token) => {
+  const login = (token, navigate) => {
     localStorage.setItem('token', token);
     setIsLoggedIn(true);
+    if (navigate) {
+      navigate('/');
+    }
   };
 
   const logout = () => {

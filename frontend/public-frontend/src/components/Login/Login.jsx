@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { login } from '../../api/api';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { login as apiLogin } from '../../api/api';
 import './Login.css';
 
 export default function Login() {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,12 +25,11 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await login(credentials);
+      const response = await apiLogin(credentials);
       setMessage(`Welcome back ${response.user.username}`);
-      localStorage.setItem('token', response.token)
-      
+      login(response.token, navigate);
     } catch (error) {
-      setError(error.message || 'Login failed. Please try again');
+      setError(error.response?.data?.message || 'Login failed. Please try again');
     }
   };
 
@@ -35,27 +38,27 @@ export default function Login() {
       <h2>Login</h2>
       <label>
         Email:
-          <input 
-            type='email' 
-            name='email'
-            value={credentials.email}
-            onChange={handleChange}
-            required
-          />
+        <input 
+          type='email' 
+          name='email'
+          value={credentials.email}
+          onChange={handleChange}
+          required
+        />
       </label>
       <label>
         Password:
-          <input 
-            type='password' 
-            name='password'
-            value={credentials.password}
-            onChange={handleChange}
-            required
-          />
+        <input 
+          type='password' 
+          name='password'
+          value={credentials.password}
+          onChange={handleChange}
+          required
+        />
       </label>
+      <button type='submit'>Login</button>
       {message && <p className='success'>{message}</p>}
       {error && <p className='error'>{error}</p>}
-      <button type='submit'>Login</button>
     </form>
-  )
+  );
 }
