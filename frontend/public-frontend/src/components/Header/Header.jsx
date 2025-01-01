@@ -18,7 +18,10 @@ export default function Header() {
           {isLoggedIn ? (
             <button onClick={logout}>Logout</button>
           ) : (
-            <Link to="/login">Login</Link>
+            <>
+              <button><Link to="/login">Login</Link></button>
+              <button><Link to='/signup'>Signup</Link></button>
+            </>
           )}
         </ul>
       </nav>
