@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react';
-import { likeComment as apiLikeComment } from '../../api/api';
+import { likeComment as apiLikeComment } from '../api/api.js';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CommentsContext = createContext();

@@ -31,7 +31,11 @@ export default function PostDetails() {
         const fetchedComments = await fetchCommentsByPostId(postId);
         setComments(fetchedComments);
       } catch (error) {
-        setCommentsError(error.message);
+        if (error.response && error.response.status === 401) {
+          setCommentsError('Please login to interact with comments')
+        } else {
+          setCommentsError(error.message);
+        }
       }
     };
     loadComments();
