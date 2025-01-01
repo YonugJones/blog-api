@@ -2,6 +2,7 @@ const express = require('express');
 const postController = require('../controllers/postController');
 const commentController = require('../controllers/commentController');
 const { authenticateToken } = require('../middleware/authMiddleware');
+const { comment } = require('../prisma/prismaClient');
 const router = express.Router();
 
 // Post routes
@@ -16,6 +17,7 @@ router.get('/:postId/comments', authenticateToken, commentController.getPostComm
 router.post('/:postId/comments', authenticateToken, commentController.createComment);
 router.put('/:postId/comments/:commentId', authenticateToken, commentController.editComment);
 router.post('/:postId/comments/:commentId/like', authenticateToken, commentController.likeComment);
+router.post('/:postId/comments/:commentId/unlike', authenticateToken, commentController.unlikeComment);
 router.delete('/:postId/comments/:commentId', authenticateToken, commentController.softDeleteComment);
 
 module.exports = router;
