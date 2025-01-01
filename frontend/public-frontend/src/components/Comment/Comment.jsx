@@ -1,6 +1,14 @@
+import { useContext } from 'react';
+import { CommentsContext } from '../../context/CommentsContext';
 import './Comment.css';
 
 export default function Comment({ comment }) {
+  const { likeComment } = useContext(CommentsContext);
+
+  const handleLike = () => {
+    likeComment(comment.id);
+  }
+
   return (
     <div className='comment'>
       <div className='comment-top'>
@@ -10,7 +18,7 @@ export default function Comment({ comment }) {
       <div className='comment-bottom'>
         <p className='comment-content'>{comment.content}</p>
         <div className='comment-likes'>
-          <button className='comment-likes-button'>Like</button>
+          <button onClick={handleLike} className='comment-likes-button'>Like</button>
           <p className='comment-likes-count'>{comment._count.CommentLike}</p>
         </div>
       </div> 
