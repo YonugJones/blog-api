@@ -4,45 +4,45 @@ import { fetchPostById, fetchCommentsByPostId } from '../../api/api';
 import CommentsList from '../CommentsList/CommentsList';
 import NewComment from '../NewComment/NewComment';
 import { CommentsContext } from '../../context/CommentsContext';
+import useErrorHandling from '../../hooks/useErrorHandling';
 import './PostDetails.css';
 
 export default function PostDetails() {
   const { postId } = useParams();
-  const { comments, setComments, addComment } = useContext(CommentsContext);
+  const { comments, setComments, addComment, error: commentsError } = useContext(CommentsContext);
+  const { error, handleError, clearError } = useErrorHandling();
   const [post, setPost] = useState(null);
   const [postError, setPostError] = useState(null);
-  const [commentsError, setCommentsError] = useState(null);
 
   useEffect(() => {
     const loadPost = async () => {
       try {
+        clearError();
         const fetchedPost = await fetchPostById(postId);
-        setPost(fetchedPost)
+        setPost(fetchedPost);
       } catch (error) {
-        setPostError(error.message)
-      } 
+        setPostError(error.message);
+        handleError(error);
+      }
     };
-    loadPost()
-  }, [postId]);
+    loadPost();
+  }, [postId, clearError, handleError]);
 
   useEffect(() => {
     const loadComments = async () => {
       try {
+        clearError();
         const fetchedComments = await fetchCommentsByPostId(postId);
         setComments(fetchedComments);
       } catch (error) {
-        if (error.response && error.response.status === 401) {
-          setCommentsError('Please login to interact with comments')
-        } else {
-          setCommentsError(error.message);
-        }
+        handleError(error);
       }
     };
     loadComments();
-  }, [postId, setComments]);
+  }, [postId, setComments, clearError, handleError]);
 
   if (postError) {
-    return <div>Error loading post: {[postError]}</div>;
+    return <div>Error loading post: {postError}</div>;
   }
 
   if (!post) {
@@ -65,6 +65,7 @@ export default function PostDetails() {
         <CommentsList postId={postId} comments={comments} />
       )}
       <NewComment postId={postId} onCommentAdded={addComment} />
+      {error && <p className='error-message'>{error}</p>}
     </div>
-  )
+  );
 }
