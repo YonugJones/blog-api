@@ -38,10 +38,12 @@ export const fetchPostById = (postId) =>
 export const fetchCommentsByPostId = (postId) =>
   apiClient.get(`/posts/${postId}/comments`).then((res) => res.data.comments);
 export const createComment = (postId, commentData) => 
-  apiClient.post(`/posts/${postId}/comments`, commentData).then((res) => res.data);
+  apiClient.post(`/posts/${postId}/comments`, commentData).then((res) => res.data.comment);
 export const likeComment = (postId, commentId) =>
   apiClient.post(`/posts/${postId}/comments/${commentId}/like`).then((res) => res.data.comment);
 export const unlikeComment = (postId, commentId) =>
   apiClient.post(`/posts/${postId}/comments/${commentId}/unlike`).then((res) => res.data.comment);
 export const editComment = (postId, commentId, commentData) =>
-  apiClient.put(`/posts/${postId}/comments/${commentId}`, commentData).then((res) => res.data);
+  apiClient.put(`/posts/${postId}/comments/${commentId}`, commentData).then((res) => res.data.comment);
+export const softDeleteComment = (postId, commentId) =>
+  apiClient.delete(`/posts/${postId}/comments/${commentId}`).then((res) => res.data.comment)
