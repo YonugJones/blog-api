@@ -1,12 +1,24 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CommentsContext } from '../../context/CommentsContext';
 import './Comment.css';
 
 export default function Comment({ postId, comment }) {
-  const { likeComment } = useContext(CommentsContext);
+  const { likeComment, unlikeComment } = useContext(CommentsContext);
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const existingLike = comment.CommentLike?.find((like) => like.userId === userId);
+    setLiked(!!existingLike);
+  }, [comment])
 
   const handleLike = () => {
-    likeComment(postId, comment.id);
+    if (liked) {
+      unlikeComment(postId, comment.id)
+    } else {
+      likeComment(postId, comment.id)
+    }
+    setLiked(!liked);
   }
 
   return (
@@ -18,7 +30,9 @@ export default function Comment({ postId, comment }) {
       <div className='comment-bottom'>
         <p className='comment-content'>{comment.content}</p>
         <div className='comment-likes'>
-          <button onClick={handleLike} className='comment-likes-button'>Like</button>
+          <button onClick={handleLike} className='comment-likes-button'>
+            {liked ? 'Liked' : 'Like'}
+          </button>
           <p className='comment-likes-count'>{comment._count.CommentLike}</p>
         </div>
       </div> 

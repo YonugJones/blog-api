@@ -117,13 +117,14 @@ const likeComment = asyncHandler(async (req, res) => {
     throw new CustomError('Invalid comment ID', 400);
   }
 
-  const comment = await prisma.comment.findUnique({ 
-    where: { 
-      id: commentId 
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
     },
     include: {
-      user: true,
-    }
+      user: true, // Include user information
+      CommentLike: true, // Include likes information
+    },
   });
 
   if (!comment) {
@@ -134,7 +135,7 @@ const likeComment = asyncHandler(async (req, res) => {
     where: {
       userId_commentId: {
         userId: user.id,
-        commentId 
+        commentId,
       },
     },
   });
@@ -142,7 +143,7 @@ const likeComment = asyncHandler(async (req, res) => {
   if (existingLike) {
     return res.status(200).json({
       success: false,
-      message: 'User has already liked comment'
+      message: 'User has already liked comment',
     });
   }
 
@@ -158,7 +159,8 @@ const likeComment = asyncHandler(async (req, res) => {
       id: commentId,
     },
     include: {
-      user: true,
+      user: true, // Include user information
+      CommentLike: true, // Include likes information
       _count: {
         select: { CommentLike: true },
       },
@@ -184,7 +186,7 @@ const unlikeComment = asyncHandler(async (req, res) => {
     where: {
       userId_commentId: {
         userId: user.id,
-        commentId
+        commentId,
       },
     },
   });
@@ -205,10 +207,23 @@ const unlikeComment = asyncHandler(async (req, res) => {
     },
   });
 
+  const updatedComment = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+    include: {
+      user: true, 
+      CommentLike: true,
+      _count: {
+        select: { CommentLike: true },
+      }
+    },
+  });
+
   res.status(200).json({
     success: true,
     message: 'Comment successfully unliked',
-    comment: updatedComment
+    comment: updatedComment,
   });
 });
 

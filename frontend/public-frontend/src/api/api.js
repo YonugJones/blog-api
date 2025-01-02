@@ -19,9 +19,15 @@ apiClient.interceptors.request.use((config) => {
 export const signup = (userData) => 
   apiClient.post('/auth/signup', userData).then((res) => res.data);
 export const login = (credentials) => 
-  apiClient.post('/auth/login', credentials).then((res) => res.data);
+  apiClient.post('/auth/login', credentials).then((res) => {
+    const { token, user } = res.data;
+    localStorage.setItem('token', token);
+    localStorage.setItem('userId', user.id);
+    return res.data
+  });
 export const logout = () => {
   localStorage.removeItem('token');
+  localStorage.removeItem('userId');
   window.location.reload();
 };
 
