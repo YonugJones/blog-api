@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { fetchCommentsByPostId } from '../api/api';
+import { fetchCommentsByPostId as apiFetchComments } from '../api/api';
 import useErrorHandling from './useErrorHandling';
 
 const useComments = (postId) => {
   const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { error, handleError, clearError } = useErrorHandling();
 
   useEffect(() => {
@@ -13,8 +13,7 @@ const useComments = (postId) => {
     const loadComments = async () => {
       try {
         clearError();
-        setLoading(true);
-        const fetchedComments = await fetchCommentsByPostId(postId);
+        const fetchedComments = await apiFetchComments(postId);
         setComments(fetchedComments);
       } catch (error) {
         handleError(error);

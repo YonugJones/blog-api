@@ -1,0 +1,32 @@
+import { useParams } from 'react-router-dom';
+import { usePostContext } from '../../context/PostContext';
+
+import CommentsList from '../CommentsList/CommentsList';
+import NewComment from '../NewComment/NewComment';
+
+import './Post.css';
+
+export default function Post() {
+  const { postId } = useParams();
+  const { usePostById } = usePostContext();
+  const { post, loading: postLoading, error: postError } = usePostById(postId);
+
+
+  if (postLoading) return <div>Loading post...</div>;
+  if (postError) return <div>{postError}</div>;
+  
+  return (
+    <div className="post">
+      <img src={post.imageUrl} alt={post.title} className="post-image" />
+      <h1 className="post-title">{post.title}</h1>
+      <p className="post-content">{post.content}</p>
+      <p className="post-author">Author: {post.author.username}</p>
+      <p className="post-published">Published: {new Date(post.createdAt).toLocaleString()}</p>
+      <div className="comments-header">
+        <h2>Comments</h2>
+      </div>
+      <CommentsList postId={postId} />
+      <NewComment postId={postId} />
+    </div>
+  );
+}

@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
-import { fetchPostById } from '../api/api';
+import { fetchPostById as apiFetchPost } from '../api/api';
 import useErrorHandling from './useErrorHandling';
 
 const usePost = (postId) => {
   const [post, setPost] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { error, handleError, clearError } = useErrorHandling();
 
   useEffect(() => {
     const loadPost = async() => {
       try {
         clearError();
-        setLoading(true);
-        const fetchedPost = await fetchPostById(postId);
+        const fetchedPost = await apiFetchPost(postId);
         setPost(fetchedPost);
       } catch (error) {
         handleError(error);
