@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchPosts } from '../api/api';
 import useErrorHandling from './useErrorHandling';
 
-export const useFetchPosts = () => {
+const usePosts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const { error, handleError, clearError } = useErrorHandling();
@@ -22,6 +22,8 @@ export const useFetchPosts = () => {
     }
     loadPosts();
   }, [clearError, handleError])
-  
+
   return { posts, loading, error };
 }
+
+export default usePosts;

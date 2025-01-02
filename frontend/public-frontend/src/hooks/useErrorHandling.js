@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function useErrorHandling() {
+const useErrorHandling = () => {
   const [error, setError] = useState(null);
 
   const handleError = (errorResponse) => {
@@ -19,3 +19,5 @@ export default function useErrorHandling() {
 
   return { error, handleError, clearError }
 }
+
+export default useErrorHandling;

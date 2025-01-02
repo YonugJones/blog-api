@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import CommentsList from '../CommentsList/CommentsList';
 import NewComment from '../NewComment/NewComment';
-import useFetchPost from '../../hooks/useFetchPost';
-import useFetchComments from '../../hooks/useFetchComments';
+import useFetchPost from '../../hooks/usePosts';
+import useFetchComments from '../../hooks/useComments';
 import './PostDetails.css';
 
 export default function PostDetails() {
