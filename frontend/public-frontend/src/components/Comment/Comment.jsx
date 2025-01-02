@@ -1,25 +1,33 @@
 import { useContext, useState, useEffect } from 'react';
 import { CommentsContext } from '../../context/CommentsContext';
+import useErrorHandling from '../../hooks/useErrorHandling';
 import './Comment.css';
 
 export default function Comment({ postId, comment }) {
   const { likeComment, unlikeComment } = useContext(CommentsContext);
+  const { error, handleError, clearError } = useErrorHandling();
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId');
+    // Check if the user has already liked the comment
+    const userId = localStorage.getItem('userId'); // Get the user ID from localStorage
     const existingLike = comment.CommentLike?.find((like) => like.userId === userId);
     setLiked(!!existingLike);
-  }, [comment])
+  }, [comment]);
 
-  const handleLike = () => {
-    if (liked) {
-      unlikeComment(postId, comment.id)
-    } else {
-      likeComment(postId, comment.id)
+  const handleLike = async () => {
+    try {
+      clearError();
+      if (liked) {
+        await unlikeComment(postId, comment.id);
+      } else {
+        await likeComment(postId, comment.id);
+      }
+      setLiked(!liked);
+    } catch (error) {
+      handleError(error);
     }
-    setLiked(!liked);
-  }
+  };
 
   return (
     <div className='comment'>
@@ -35,8 +43,8 @@ export default function Comment({ postId, comment }) {
           </button>
           <p className='comment-likes-count'>{comment._count.CommentLike}</p>
         </div>
+        {error && <p className='error-message'>{error}</p>}
       </div> 
     </div>
   )
 }
-

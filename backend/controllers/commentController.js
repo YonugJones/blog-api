@@ -122,8 +122,8 @@ const likeComment = asyncHandler(async (req, res) => {
       id: commentId,
     },
     include: {
-      user: true, // Include user information
-      CommentLike: true, // Include likes information
+      user: true, 
+      CommentLike: true, 
     },
   });
 
