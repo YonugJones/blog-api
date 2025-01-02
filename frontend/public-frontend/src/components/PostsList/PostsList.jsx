@@ -1,31 +1,21 @@
-import { useState, useEffect } from 'react';
+import { usePosts } from '../../context/PostContext';
 import PostCard from '../PostCard/PostCard';
 import './PostsList.css';
-import { fetchPosts } from '../../api/api';
 
 export default function PostsList() {
-  const [posts, setPosts] = useState([]);
-  const [error, setError] = useState(null);
+ const { posts, loading, error } = usePosts();
 
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const posts = await fetchPosts(); 
-        setPosts(posts);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-    loadPosts();
-  }, []);
+ if (loading) {
+  return <div>Loading posts...</div>;
+}
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+if (error) {
+  return <div>Error: {error}</div>;
+}
 
-  if (!posts.length) {
-    return <div>Loading posts...</div>;
-  }
+if (!posts.length) {
+  return <div>No posts available.</div>;
+}
 
   return (
     <div className='posts-list'>
