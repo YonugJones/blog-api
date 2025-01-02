@@ -1,10 +1,6 @@
 import { createContext, useContext } from 'react';
 import useComments from '../hooks/useComments';
-import 
-  { 
-    likeComment as apiLikeComment, 
-    unlikeComment as apiUnlikeComment, 
-  } from '../api/api';
+import { likeComment as apiLikeComment, unlikeComment as apiUnlikeComment } from '../api/api';
 
 // Create PostContext
 // eslint-disable-next-line react-refresh/only-export-components

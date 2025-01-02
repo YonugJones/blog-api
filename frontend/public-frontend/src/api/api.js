@@ -43,3 +43,5 @@ export const likeComment = (postId, commentId) =>
   apiClient.post(`/posts/${postId}/comments/${commentId}/like`).then((res) => res.data.comment);
 export const unlikeComment = (postId, commentId) =>
   apiClient.post(`/posts/${postId}/comments/${commentId}/unlike`).then((res) => res.data.comment);
+export const editComment = (postId, commentId, commentData) =>
+  apiClient.put(`/posts/${postId}/comments/${commentId}`, commentData).then((res) => res.data);
