@@ -1,52 +1,21 @@
-import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPostById, fetchCommentsByPostId } from '../../api/api';
 import CommentsList from '../CommentsList/CommentsList';
 import NewComment from '../NewComment/NewComment';
-import { CommentsContext } from '../../context/CommentsContext';
-import useErrorHandling from '../../hooks/useErrorHandling';
+import useFetchPost from '../../hooks/useFetchPost';
+import useFetchComments from '../../hooks/useFetchComments';
 import './PostDetails.css';
 
 export default function PostDetails() {
   const { postId } = useParams();
-  const { comments, setComments, addComment, error: commentsError } = useContext(CommentsContext);
-  const { error, handleError, clearError } = useErrorHandling();
-  const [post, setPost] = useState(null);
-  const [postError, setPostError] = useState(null);
+  const { post, loading: postLoading, error: postError } = useFetchPost(postId);
+  const { comments, error: commentsError } = useFetchComments(postId);
 
-  useEffect(() => {
-    const loadPost = async () => {
-      try {
-        clearError();
-        const fetchedPost = await fetchPostById(postId);
-        setPost(fetchedPost);
-      } catch (error) {
-        setPostError(error.message);
-        handleError(error);
-      }
-    };
-    loadPost();
-  }, [postId, clearError, handleError]);
-
-  useEffect(() => {
-    const loadComments = async () => {
-      try {
-        clearError();
-        const fetchedComments = await fetchCommentsByPostId(postId);
-        setComments(fetchedComments);
-      } catch (error) {
-        handleError(error);
-      }
-    };
-    loadComments();
-  }, [postId, setComments, clearError, handleError]);
+  if (postLoading) {
+    return <div>Loading post...</div>;
+  }
 
   if (postError) {
     return <div>Error loading post: {postError}</div>;
-  }
-
-  if (!post) {
-    return <div>Loading post...</div>;
   }
 
   return (
@@ -64,8 +33,7 @@ export default function PostDetails() {
       ) : (
         <CommentsList postId={postId} comments={comments} />
       )}
-      <NewComment postId={postId} onCommentAdded={addComment} />
-      {error && <p className='error-message'>{error}</p>}
+      <NewComment postId={postId} />
     </div>
   );
 }
