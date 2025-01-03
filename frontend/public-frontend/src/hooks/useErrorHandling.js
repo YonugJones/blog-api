@@ -1,21 +1,21 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 const useErrorHandling = () => {
   const [error, setError] = useState(null);
 
-  const handleError = (errorResponse) => {
+  const handleError = useCallback((errorResponse) => {
     if (errorResponse.response) {
-      setError(errorResponse.response.data.message || 'An error occured');
+      setError(errorResponse.response.data.message || 'An error occurred');
     } else if (errorResponse.request) {
-      setError('No response from the server. Please try again later')
+      setError('No response from the server. Please try again later');
     } else {
-      setError(errorResponse.message)
+      setError(errorResponse.message);
     }
-  };
+  }, []);
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     setError(null);
-  };
+  }, []);
 
   return { error, handleError, clearError }
 }

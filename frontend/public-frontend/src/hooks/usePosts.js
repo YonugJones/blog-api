@@ -4,14 +4,16 @@ import useErrorHandling from './useErrorHandling';
 
 const usePosts = () => {
   const [posts, setPosts] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { error, handleError, clearError } = useErrorHandling();
 
   useEffect(() => {
     const loadPosts = async () => {
       try {
         clearError();
-        const fetchedPosts = await apiFetchPosts();
+        setLoading(true);
+        const response = await apiFetchPosts();
+        const fetchedPosts = response.data;
         setPosts(fetchedPosts);
       } catch (error) {
         handleError(error)

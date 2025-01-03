@@ -3,26 +3,22 @@ import { createComment } from '../../api/api';
 import useErrorHandling from '../../hooks/useErrorHandling';
 import './NewComment.css';
 
-const NewComment = ({ postId }) => {
+const NewComment = ({ postId, onCommentAdded }) => {
   const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { error, handleError, clearError } = useErrorHandling();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setContent((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
+  const handleChange = (e) => setContent(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       clearError();
-      const response = await createComment(postId, content);
-      setContent(response.content)
+      const newComment = await createComment(postId, { content });
+      setContent('')
+      onCommentAdded(newComment)
     } catch (error) {
       handleError(error);
     } finally {
@@ -34,17 +30,18 @@ const NewComment = ({ postId }) => {
     <form className='new-comment-form' onSubmit={handleSubmit}>
       <h2>New Comment</h2>
       <label>
-        <input 
-          type='text' 
+        <textarea 
           name='content'
-          value={commentData.content}
+          value={content}
           onChange={handleChange}
           required
         />
       </label>
-      <button type='submit'>Add Comment</button>
-      {message && <p className='success'>{message}</p>}
+      <button type='submit' disabled={loading}>Add Comment</button>
+      {loading ? 'Adding...' : 'Add comment'}
       {error && <p className='error'>{error}</p>}
     </form>
   );
 }
+
+export default NewComment;

@@ -7,7 +7,9 @@ const PostsList = () => {
 
   if (loading) return <div>Loading posts...</div>;
   if (error) return <div>{error}</div>;
-  if (!posts.length) return <div>No posts available.</div>;
+  if(!posts) return <div>Uh oh no posts!</div>
+
+  console.log(posts); // the log is showing the posts keep being retried over and over until the app crashes
 
   return (
     <div className='posts-list'>
