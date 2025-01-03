@@ -16,15 +16,11 @@ const getAllPosts = asyncHandler(async (req, res) => {
     },
   });
 
-  if (posts.length === 0) {
-    return res.status(200).json({ messsage: 'No posts found', data: [] });
-  }
-
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
-    message: 'All posts retrieved',
-    posts: posts
-  })
+    message: posts.length > 0 ? 'All posts retrieved' : 'No posts found',
+    data: posts,
+  });
 });
 
 const getPostById = asyncHandler(async (req, res) => {
@@ -38,17 +34,17 @@ const getPostById = asyncHandler(async (req, res) => {
       imageUrl: true,
       createdAt: true,
       author: { select: { id: true, username: true } },
-    }
+    },
   });
 
   if (!post) {
     throw new CustomError('Post not found', 404);
   }
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
-    message: 'Post retrieved',
-    post: post
+    message: 'Post retrieved successfully',
+    data: post,
   });
 });
 
@@ -58,54 +54,74 @@ const createPost = asyncHandler(async (req, res) => {
     throw new CustomError('Unauthorized, user not authenticated', 401);
   }
 
-  const { title, content } = req.body;
+  const { title, content, imageUrl } = req.body;
   if (!title || !content) {
     throw new CustomError('Post must have title and content', 400);
   }
 
   const post = await prisma.post.create({
-    success: true,
-    message: 'Post created',
     data: {
       title,
       content,
+      imageUrl,
       authorId: user.id,
-    }
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      imageUrl: true,
+      createdAt: true,
+      author: { select: { id: true, username: true } },
+    },
   });
 
-  res.status(201).json(post);
+  res.status(201).json({
+    success: true,
+    message: 'Post created successfully',
+    data: post,
+  });
 });
 
 const editPost = asyncHandler(async (req, res) => {
   const user = req.user;
   const postId = parseInt(req.params.postId, 10);
-  const post = await prisma.post.findUnique({ where: { id: postId } });
-  const { title, content } = req.body;
+  const { title, content, imageUrl } = req.body;
+
   if (!user) {
     throw new CustomError('Unauthorized, user not authenticated', 401);
   }
 
+  const post = await prisma.post.findUnique({ where: { id: postId } });
   if (!post) {
     throw new CustomError('Post not found', 404);
+  }
+
+  if (post.authorId !== user.id) {
+    throw new CustomError('Unauthorized to edit this post', 403);
   }
 
   if (!title || !content) {
     throw new CustomError('Post must have title and content', 400);
   }
 
-  if (post.authorId !== user.id) {
-    throw new CustomError('Unauthorized to edit post', 403);
-  }
-
   const updatedPost = await prisma.post.update({
     where: { id: postId },
-    data: { title, content }
+    data: { title, content, imageUrl },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      imageUrl: true,
+      createdAt: true,
+      author: { select: { id: true, username: true } },
+    },
   });
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
-    message: 'Post updated',
-    post: updatedPost
+    message: 'Post updated successfully',
+    data: updatedPost,
   });
 });
 
@@ -115,8 +131,9 @@ const softDeletePost = asyncHandler(async (req, res) => {
 
   const post = await prisma.post.findUnique({
     where: { id: postId },
-    select: { title: true, authorId: true }
+    select: { title: true, authorId: true },
   });
+
   if (!post) {
     throw new CustomError('Post not found', 404);
   }
@@ -127,18 +144,13 @@ const softDeletePost = asyncHandler(async (req, res) => {
 
   await prisma.$transaction([
     prisma.post.update({ where: { id: postId }, data: { isDeleted: true } }),
-    prisma.comment.updateMany({ where: { postId: postId }, data: { isDeleted: true } })
+    prisma.comment.updateMany({ where: { postId }, data: { isDeleted: true } }),
   ]);
-
-  const deletedPost = await prisma.post.findUnique({
-    where: { id: postId },
-    select: { title: true, isDeleted: true }
-  });
 
   res.status(200).json({
     success: true,
     message: 'Post and associated comments soft deleted',
-    post: deletedPost
+    data: { id: postId, title: post.title, isDeleted: true },
   });
 });
 
@@ -147,5 +159,5 @@ module.exports = {
   getPostById,
   createPost,
   editPost,
-  softDeletePost
-}
+  softDeletePost,
+};
