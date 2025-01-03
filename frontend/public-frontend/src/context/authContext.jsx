@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem('token', token);
     setIsLoggedIn(true);
     if (navigate) {
-      navigate('/');
+      navigate('/posts');
     }
   };
 

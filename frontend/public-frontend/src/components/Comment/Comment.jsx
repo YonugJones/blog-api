@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { likeComment as apiLikeComment, unlikeComment as apiUnlikeComment } from '../../api/api';
-import './Comment.css'
+import './Comment.css';
 
 const Comment = ({ comment }) => {
   const [liked, setLiked] = useState(false);
@@ -9,23 +9,24 @@ const Comment = ({ comment }) => {
 
   useEffect(() => {
     setLiked(comment.isLiked);
-    setLikeCount(comment._count.CommentLike)
-  }, [comment])
+    setLikeCount(comment._count.CommentLike);
+  }, [comment]);
 
   const handleLike = async () => {
     try {
+      console.log(comment.id);
       if (liked) {
         const response = await apiUnlikeComment(comment.postId, comment.id);
-        setLikeCount(response.data._count.CommentLike)
+        setLikeCount(response.data._count.CommentLike); 
       } else {
         const response = await apiLikeComment(comment.postId, comment.id);
-        setLikeCount(response.data._count.CommentLike)
+        setLikeCount(response.data._count.CommentLike); 
       }
-      setLiked(!liked);
+      setLiked(!liked); 
     } catch (err) {
-      setError(err.response?.data?.message || 'Not able to handle comment like')
+      setError(err.response?.data?.message || 'Not able to handle comment like');
     }
-  }
+  };
 
   return (
     <div className='comment'>
@@ -41,10 +42,10 @@ const Comment = ({ comment }) => {
           </button>
           <p className='comment-likes-count'>{likeCount}</p>
         </div>
-        {error & <p className='error'>{error}</p>}
+        {error && <p className='error'>{error}</p>}
       </div>
     </div>
   );
-}
+};
 
 export default Comment;
