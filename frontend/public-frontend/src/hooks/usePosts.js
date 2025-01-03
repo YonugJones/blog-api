@@ -1,27 +1,26 @@
+// This hook ensures proper data fetching, error handling, and state management of all posts
+
 import { useState, useEffect } from 'react';
 import { fetchPosts as apiFetchPosts } from '../api/api';
-import useErrorHandling from './useErrorHandling';
 
 const usePosts = () => {
   const [posts, setPosts] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const { error, handleError, clearError } = useErrorHandling();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        clearError();
-        setLoading(true);
         const response = await apiFetchPosts();
         setPosts(response.data);
-      } catch (error) {
-        handleError(error)
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to load posts');
       } finally {
         setLoading(false);
       }
     }
     loadPosts();
-  }, [clearError, handleError])
+  }, [])
 
   return { posts, loading, error };
 }

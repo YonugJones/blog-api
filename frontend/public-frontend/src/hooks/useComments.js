@@ -1,11 +1,12 @@
+// This hook ensures proper data fetching, error handling, and state management of comments for single post
+
 import { useState, useEffect } from 'react';
 import { fetchCommentsByPostId as apiFetchComments } from '../api/api';
-import useErrorHandling from './useErrorHandling';
 
 const useComments = (postId) => {
   const [comments, setComments] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { error, handleError, clearError } = useErrorHandling();
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (!postId) {
@@ -15,18 +16,17 @@ const useComments = (postId) => {
 
     const loadComments = async () => {
       try {
-        clearError();
         const fetchedComments = await apiFetchComments(postId);
-        setComments(fetchedComments);
-      } catch (error) {
-        handleError(error);
+        setComments(fetchedComments.data);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to load comments');
       } finally {
         setLoading(false);
       }
     };
 
     loadComments();
-  }, [postId, clearError, handleError]);
+  }, [postId]);
 
   return { comments, loading, error };
 };

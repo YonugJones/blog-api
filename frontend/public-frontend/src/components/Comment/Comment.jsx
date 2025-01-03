@@ -1,23 +1,21 @@
 import { useState } from 'react';
-import useErrorHandling from '../../hooks/useErrorHandling';
 import { likeComment as apiLikeComment, unlikeComment as apiUnlikeComment } from '../../api/api';
 import './Comment.css'
 
 const Comment = (comment) => {
   const [liked, setLiked] = useState(false);
-  const { error, handleError, clearError } = useErrorHandling();
+  const [error, setError] = useState(null);
 
   const handleLike = async () => {
     try {
-      clearError();
       if (liked) {
         await apiUnlikeComment(comment.postId, comment.id);
       } else {
         await apiLikeComment(comment.postId, comment.id);
       }
       setLiked(!liked);
-    } catch (error) {
-      handleError(error)
+    } catch (err) {
+      setError(err.response?.data?.message || 'Not able to handle comment like')
     }
   }
 

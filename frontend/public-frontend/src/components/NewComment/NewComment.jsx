@@ -1,12 +1,11 @@
 import { useState  } from 'react';
 import { createComment } from '../../api/api';
-import useErrorHandling from '../../hooks/useErrorHandling';
 import './NewComment.css';
 
 const NewComment = ({ postId, onCommentAdded }) => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-  const { error, handleError, clearError } = useErrorHandling();
+  const [error, setError] = useState(null)
 
   const handleChange = (e) => setContent(e.target.value);
 
@@ -15,12 +14,11 @@ const NewComment = ({ postId, onCommentAdded }) => {
     setLoading(true);
 
     try {
-      clearError();
       const newComment = await createComment(postId, { content });
       setContent('')
       onCommentAdded(newComment)
-    } catch (error) {
-      handleError(error);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to add comment');
     } finally {
       setLoading(false);
     }

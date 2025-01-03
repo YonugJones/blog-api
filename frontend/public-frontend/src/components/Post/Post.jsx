@@ -14,8 +14,6 @@ const Post = () => {
   if (error) return <div>{error}</div>;
   if (!post) return <div>No post found</div>;
 
-  console.log(post);
-
   return (
     <div className='post'>
       <img src={post.imageUrl} alt={post.title} className='post-image' />

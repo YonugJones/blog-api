@@ -1,4 +1,4 @@
-// This hook ensures proper data fetching, error handling, and state management.
+// This hook ensures proper data fetching, error handling, and state management of single Post
 
 import { useState, useEffect } from 'react';
 import { fetchPostById as apiFetchPost } from '../api/api';
