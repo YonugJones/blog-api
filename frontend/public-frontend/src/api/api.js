@@ -34,16 +34,16 @@ export const logout = () => {
 export const fetchPosts = () =>
   apiClient.get('/posts').then((res) => res.data);
 export const fetchPostById = (postId) =>
-  apiClient.get(`/posts/${postId}`).then((res) => res.data.post);
+  apiClient.get(`/posts/${postId}`).then((res) => res.data);
 export const fetchCommentsByPostId = (postId) =>
-  apiClient.get(`/posts/${postId}/comments`).then((res) => res.data.comments);
+  apiClient.get(`/posts/${postId}/comments`).then((res) => res.data);
 export const createComment = (postId, commentData) => 
-  apiClient.post(`/posts/${postId}/comments`, commentData).then((res) => res.data.comment);
+  apiClient.post(`/posts/${postId}/comments`, commentData).then((res) => res.data);
 export const likeComment = (postId, commentId) =>
-  apiClient.post(`/posts/${postId}/comments/${commentId}/like`).then((res) => res.data.comment);
+  apiClient.post(`/posts/${postId}/comments/${commentId}/like`).then((res) => res.data);
 export const unlikeComment = (postId, commentId) =>
-  apiClient.post(`/posts/${postId}/comments/${commentId}/unlike`).then((res) => res.data.comment);
+  apiClient.post(`/posts/${postId}/comments/${commentId}/unlike`).then((res) => res.data);
 export const editComment = (postId, commentId, commentData) =>
-  apiClient.put(`/posts/${postId}/comments/${commentId}`, commentData).then((res) => res.data.comment);
+  apiClient.put(`/posts/${postId}/comments/${commentId}`, commentData).then((res) => res.data);
 export const softDeleteComment = (postId, commentId) =>
-  apiClient.delete(`/posts/${postId}/comments/${commentId}`).then((res) => res.data.comment)
+  apiClient.delete(`/posts/${postId}/comments/${commentId}`).then((res) => res.data)

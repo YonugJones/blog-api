@@ -13,8 +13,7 @@ const usePosts = () => {
         clearError();
         setLoading(true);
         const response = await apiFetchPosts();
-        const fetchedPosts = response.data;
-        setPosts(fetchedPosts);
+        setPosts(response.data);
       } catch (error) {
         handleError(error)
       } finally {

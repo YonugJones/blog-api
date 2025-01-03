@@ -6,20 +6,22 @@ import './Post.css';
 
 const Post = () => {
   const { postId } = useParams();
-  const { post, loading, error } = usePost();
-
+  const { post, loading, error } = usePost(postId);
 
   if (loading) return <div>Loading post...</div>;
   if (error) return <div>{error}</div>;
+
+  console.log(postId);
+  console.log(post);
   
   return (
-    <div className="post">
-      <img src={post.imageUrl} alt={post.title} className="post-image" />
-      <h1 className="post-title">{post.title}</h1>
-      <p className="post-content">{post.content}</p>
-      <p className="post-author">Author: {post.author.username}</p>
-      <p className="post-published">Published: {new Date(post.createdAt).toLocaleString()}</p>
-      <div className="comments-header">
+    <div className='post'>
+      <img src={post.imageUrl} alt={post.title} className='post-image' />
+      <h1 className='post-title'>{post.title}</h1>
+      <p className='post-content'>{post.content}</p>
+      <p className='post-author'>Author: {post.author.username}</p>
+      <p className='post-published'>Published: {new Date(post.createdAt).toLocaleString()}</p>
+      <div className='comments-header'>
         <h2>Comments</h2>
       </div>
       <CommentsList postId={postId} />

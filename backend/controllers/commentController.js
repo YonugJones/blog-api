@@ -1,3 +1,4 @@
+// backend/CommentController
 const prisma = require('../prisma/prismaClient');
 const asyncHandler = require('express-async-handler');
 const CustomError = require('../errors/customError');
@@ -19,9 +20,7 @@ const formatComment = (comment) => ({
 
 const getPostComments = asyncHandler(async (req, res) => {
   const postId = parseInt(req.params.postId, 10);
-  const post = await prisma.post.findUnique({
-    where: { id: postId, isDeleted: false },
-  });
+  const post = await prisma.post.findUnique({ where: { id: postId, isDeleted: false } });
 
   if (!post) {
     throw new CustomError(`Post with id ${postId} not found or has been deleted`, 404);
@@ -43,8 +42,8 @@ const getPostComments = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: comments.length > 0 
-      ? `Comments for post with id ${postId} retrieved` 
+    message: comments.length > 0
+      ? `Comments for post with id ${postId} retrieved`
       : `No comments for post with id ${postId}`,
     data: comments.map(formatComment),
   });
@@ -55,10 +54,7 @@ const createComment = asyncHandler(async (req, res) => {
   const postId = parseInt(req.params.postId, 10);
   const { content } = req.body;
 
-  const post = await prisma.post.findUnique({
-    where: { id: postId, isDeleted: false },
-  });
-  
+  const post = await prisma.post.findUnique({ where: { id: postId, isDeleted: false } });
   if (!post) {
     throw new CustomError(`Post with id ${postId} not found or has been deleted`, 404);
   }
@@ -190,10 +186,7 @@ const softDeleteComment = asyncHandler(async (req, res) => {
   const user = req.user;
   const commentId = parseInt(req.params.commentId, 10);
 
-  const comment = await prisma.comment.findUnique({
-    where: { id: commentId, isDeleted: false },
-  });
-
+  const comment = await prisma.comment.findUnique({ where: { id: commentId, isDeleted: false } });
   if (!comment) {
     throw new CustomError('Comment not found or already deleted', 404);
   }
@@ -202,15 +195,12 @@ const softDeleteComment = asyncHandler(async (req, res) => {
     throw new CustomError('Unauthorized to delete comment', 403);
   }
 
-  await prisma.comment.update({
-    where: { id: commentId },
-    data: { isDeleted: true },
-  });
+  await prisma.comment.update({ where: { id: commentId }, data: { isDeleted: true } });
 
   res.status(200).json({
     success: true,
     message: 'Comment deleted successfully',
-    data: { id: commentId, isDeleted: true },
+    data: null,
   });
 });
 
