@@ -1,19 +1,16 @@
 import { useParams } from 'react-router-dom';
-import { usePostContext } from '../../context/PostContext';
-
+import usePost from '../../hooks/usePost';
 import CommentsList from '../CommentsList/CommentsList';
 import NewComment from '../NewComment/NewComment';
-
 import './Post.css';
 
-export default function Post() {
+const Post = () => {
   const { postId } = useParams();
-  const { usePostById } = usePostContext();
-  const { post, loading: postLoading, error: postError } = usePostById(postId);
+  const { post, loading, error } = usePost();
 
 
-  if (postLoading) return <div>Loading post...</div>;
-  if (postError) return <div>{postError}</div>;
+  if (loading) return <div>Loading post...</div>;
+  if (error) return <div>{error}</div>;
   
   return (
     <div className="post">
@@ -30,3 +27,5 @@ export default function Post() {
     </div>
   );
 }
+
+export default Post;

@@ -1,9 +1,9 @@
-import { usePostContext } from '../../context/PostContext';
+import usePosts from '../../hooks/usePosts';
 import PostCard from '../PostCard/PostCard';
 import './PostsList.css';
 
-export default function PostsList() {
-  const { posts, loading, error } = usePostContext(); // fetch from context
+const PostsList = () => {
+  const { posts, loading, error } = usePosts();
 
   if (loading) return <div>Loading posts...</div>;
   if (error) return <div>{error}</div>;
@@ -11,9 +11,11 @@ export default function PostsList() {
 
   return (
     <div className='posts-list'>
-      {posts.map(post => (
+      {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
     </div>
   );
 }
+
+export default PostsList;

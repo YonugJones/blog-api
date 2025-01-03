@@ -1,17 +1,16 @@
-import { useState, useContext } from 'react';
+import { useState  } from 'react';
 import { createComment } from '../../api/api';
-import { CommentsContext } from '../../context/CommentsContext';
+import useErrorHandling from '../../hooks/useErrorHandling';
 import './NewComment.css';
 
-export default function NewComment({ postId }) {
-  const [commentData, setCommentData] = useState({ content: '' });
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const { addComment } = useContext(CommentsContext);
+const NewComment = ({ postId }) => {
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(true);
+  const { error, handleError, clearError } = useErrorHandling();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCommentData((prevData) => ({
+    setContent((prevData) => ({
       ...prevData,
       [name]: value
     }));
@@ -19,16 +18,15 @@ export default function NewComment({ postId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-    setError('');
 
     try {
-      const response = await createComment(postId, commentData);
-      setMessage(response.message || 'Comment created.');
-      setCommentData({ content: '' });
-      addComment(response.comment);
+      clearError();
+      const response = await createComment(postId, content);
+      setContent(response.content)
     } catch (error) {
-      setError(error.response?.data?.message || 'Comment creation failed. Please try again');
+      handleError(error);
+    } finally {
+      setLoading(false);
     }
   };
 

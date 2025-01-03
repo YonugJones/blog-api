@@ -1,7 +1,7 @@
 import './PostCard.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function PostCard({ post }) {
+const PostCard = ({ post }) => {
   const navigate = useNavigate()
 
   return (
@@ -11,3 +11,5 @@ export default function PostCard({ post }) {
     </div>
   )
 }
+
+export default PostCard;

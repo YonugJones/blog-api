@@ -7,6 +7,7 @@ const getPostComments = asyncHandler(async (req, res) => {
   const post = await prisma.post.findUnique({
     where: { id: postId, isDeleted: false }
   });
+
   if (!post) {
     throw new CustomError(`Post with id ${postId} not found or has been deleted`, 404);
   }
@@ -23,6 +24,7 @@ const getPostComments = asyncHandler(async (req, res) => {
       postId: true
      }
   });
+
   if (comments.length === 0) {
     return res.status(200).json({
       success: true,
@@ -46,6 +48,7 @@ const createComment = asyncHandler(async (req, res) => {
   const post = await prisma.post.findUnique({
     where: { id: postId, isDeleted: false }
   });
+  
   if (!post) {
     throw new CustomError(`Post with id ${postId} not found or has been deleted`, 404);
   }
@@ -55,27 +58,36 @@ const createComment = asyncHandler(async (req, res) => {
   }
 
   const newComment = await prisma.comment.create({
-    data: { content, postId, userId: user.id },
-    include: { user: { select: { username: true } } }
-  });
-
-  const enrichedComment = await prisma.comment.findUnique({
-    where: { id: newComment.id },
-    select: {
-      id: true,
-      content: true,
-      createdAt: true,
-      isDeleted: true,
-      postId: true,
-      user: { select: { id: true, username: true } },
-      _count: { select: { CommentLike: true } },
-    },
+    data: 
+      { 
+        content, 
+        postId, 
+        userId: user.id 
+      },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        isDeleted: true,
+        postId: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+          }
+        },
+        _count: {
+          select: {
+            CommentLike: true
+          }
+        }
+      }
   });
 
   res.status(201).json({
     success: true,
     message: 'Comment created successfully',
-    comment: enrichedComment
+    comment: newComment
   });
 });
 

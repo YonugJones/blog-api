@@ -3,7 +3,7 @@ import { fetchPosts as apiFetchPosts } from '../api/api';
 import useErrorHandling from './useErrorHandling';
 
 const usePosts = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(null);
   const [loading, setLoading] = useState(true);
   const { error, handleError, clearError } = useErrorHandling();
 
