@@ -25,6 +25,11 @@ const getAllPosts = asyncHandler(async (req, res) => {
 
 const getPostById = asyncHandler(async (req, res) => {
   const postId = parseInt(req.params.postId, 10);
+
+  if (isNaN(postId)) {
+    throw new CustomError('Invalid post ID', 400);
+  }
+
   const post = await prisma.post.findUnique({
     where: { id: postId, isDeleted: false },
     select: {

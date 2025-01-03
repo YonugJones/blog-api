@@ -14,8 +14,8 @@ const usePost = (postId) => {
       try {
         clearError();
         setLoading(true);
-        const fetchedPost = await apiFetchPost(postId);
-        setPost(fetchedPost);
+        const response = await apiFetchPost(postId);
+        setPost(response.data);
       } catch (error) {
         handleError(error);
       } finally {
