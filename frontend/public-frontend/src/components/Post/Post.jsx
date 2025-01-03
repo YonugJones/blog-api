@@ -1,3 +1,5 @@
+// This component handles loading, errors, and displaying the post information cleanly.
+
 import { useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost';
 import CommentsList from '../CommentsList/CommentsList';
@@ -6,14 +8,14 @@ import './Post.css';
 
 const Post = () => {
   const { postId } = useParams();
-  const { post, loading, error } = usePost(postId);
+  const { post, loading, error } = usePost(Number(postId)); 
 
   if (loading) return <div>Loading post...</div>;
   if (error) return <div>{error}</div>;
+  if (!post) return <div>No post found</div>;
 
-  console.log(postId);
   console.log(post);
-  
+
   return (
     <div className='post'>
       <img src={post.imageUrl} alt={post.title} className='post-image' />
