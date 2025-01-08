@@ -155,6 +155,8 @@ const likeComment = asyncHandler(async (req, res) => {
     include: { _count: { select: { CommentLike: true } } },
   });
 
+  console.log('Updated Comment:', updatedComment);
+
   res.status(200).json({
     success: true,
     message: 'Comment liked successfully',

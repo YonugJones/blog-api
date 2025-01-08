@@ -8,13 +8,13 @@ const Comment = ({ comment }) => {
   const [likeCount, setLikeCount] = useState(comment._count.CommentLike);
 
   useEffect(() => {
-    setLiked(comment.isLiked);
+    setLiked(comment.isLiked || false);
     setLikeCount(comment._count.CommentLike);
   }, [comment]);
 
   const handleLike = async () => {
     try {
-      console.log(comment.id);
+      console.log(liked);
       if (liked) {
         const response = await apiUnlikeComment(comment.postId, comment.id);
         setLikeCount(response.data._count.CommentLike); 

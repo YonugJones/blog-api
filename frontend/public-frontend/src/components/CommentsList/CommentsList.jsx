@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import './CommentsList.css';
 
 const CommentsList = ({ postId }) => {
-  const { comments, loading, error } = useComments(postId);
+  const { comments, loading, error,  } = useComments(postId);
   const { isLoggedIn } = useAuth();
   
   if (!isLoggedIn) return <div>Please login to view comments.</div>
