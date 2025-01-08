@@ -20,6 +20,7 @@ const formatComment = (comment) => ({
 
 const getPostComments = asyncHandler(async (req, res) => {
   const postId = parseInt(req.params.postId, 10);
+  const userId = req.user?.userId;
   const post = await prisma.post.findUnique({ where: { id: postId, isDeleted: false } });
 
   if (!post) {
@@ -29,23 +30,24 @@ const getPostComments = asyncHandler(async (req, res) => {
   const comments = await prisma.comment.findMany({
     where: { postId, isDeleted: false },
     orderBy: { id: 'desc' },
-    select: {
-      id: true,
-      content: true,
-      createdAt: true,
-      isDeleted: true,
-      postId: true,
+    include: {
       user: { select: { id: true, username: true } },
       _count: { select: { CommentLike: true } },
+      CommentLike: { where: { userId } }
     },
   });
+
+  const formattedComments = comments.map((comment) => ({
+    ...formatComment(comment),
+    isLikedByUser: comment.CommentLike.length > 0
+  }))
 
   res.status(200).json({
     success: true,
     message: comments.length > 0
       ? `Comments for post with id ${postId} retrieved`
       : `No comments for post with id ${postId}`,
-    data: comments.map(formatComment),
+    data: formattedComments,
   });
 });
 

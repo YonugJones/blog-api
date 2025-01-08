@@ -1,48 +1,103 @@
-import { useState, useEffect } from 'react';
-import { likeComment as apiLikeComment, unlikeComment as apiUnlikeComment } from '../../api/api';
+import { useState } from 'react';
+import { useAuth } from '../../context/authContext';
+import { likeComment, unlikeComment, editComment, softDeleteComment } from '../../api/api';
 import './Comment.css';
 
-const Comment = ({ comment }) => {
-  const [liked, setLiked] = useState(false);
+const Comment = ({ comment, postId, onUpdate }) => {
+  const { userId } = useAuth(); 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(comment.content);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [likeCount, setLikeCount] = useState(comment._count.CommentLike);
-
-  useEffect(() => {
-    setLiked(comment.isLiked || false);
-    setLikeCount(comment._count.CommentLike);
-  }, [comment]);
 
   const handleLike = async () => {
     try {
-      console.log(liked);
-      if (liked) {
-        const response = await apiUnlikeComment(comment.postId, comment.id);
-        setLikeCount(response.data._count.CommentLike); 
+      setIsLoading(true)
+      if (comment.isLikedByUser) {
+        await unlikeComment(postId, comment.id)
       } else {
-        const response = await apiLikeComment(comment.postId, comment.id);
-        setLikeCount(response.data._count.CommentLike); 
+        await likeComment(postId, comment.id)
       }
-      setLiked(!liked); 
+      onUpdate();
     } catch (err) {
-      setError(err.response?.data?.message || 'Not able to handle comment like');
+      setError(err.response?.data?.message || 'Failed to like/unlike comment');
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleEdit = async () => {
+    try {
+      setIsLoading(true);
+      await editComment(postId, comment.id, { content: editedContent });
+      setIsEditing(false);
+      onUpdate();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to edit comment');
+    } finally {
+      setIsLoading(false)
     }
   };
 
+  const handleSoftDelete = async () => {
+    try {
+      setIsLoading(true);
+      await softDeleteComment(postId, comment.id);
+      onUpdate();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete comment');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <div className='comment'>
-      <div className='comment-top'>
-        <p className='comment-author'>{comment.user.username}</p>
-        <p className='comment-date'>{new Date(comment.createdAt).toLocaleString()}</p>
+    <div className="comment">
+      {error && <p className="error">{error}</p>}
+      <div className="comment-header">
+        <span className="username">{comment.user.username}</span>
+        <span className="timestamp">{new Date(comment.createdAt).toLocaleString()}</span>
       </div>
-      <div className='comment-bottom'>
-        <p className='comment-content'>{comment.content}</p>
-        <div className='comment-likes'>
-          <button onClick={handleLike} className='comment-likes-button'>
-            {liked ? 'Liked' : 'Like'}
-          </button>
-          <p className='comment-likes-count'>{likeCount}</p>
-        </div>
-        {error && <p className='error'>{error}</p>}
+
+      {isEditing ? (
+        <textarea
+          value={editedContent}
+          onChange={(e) => setEditedContent(e.target.value)}
+          disabled={isLoading}
+        />
+      ) : (
+        <>
+          <p className="content">{comment.content}</p>
+          <button onClick={() => setIsEditing(true)}>Edit Comment</button>
+        </>
+      )}
+
+      <div className="comment-footer">
+        <button onClick={handleLike} disabled={isLoading}>
+          {comment.isLikedByUser ? 'Unlike' : 'Like'} ({comment._count.CommentLike})
+        </button>
+
+        {userId === comment.user.id && !isEditing && (
+          <>
+            <button onClick={() => setIsEditing(true)} disabled={isLoading}>
+              Edit
+            </button>
+            <button onClick={handleSoftDelete} disabled={isLoading}>
+              Delete
+            </button>
+          </>
+        )}
+
+        {isEditing && (
+          <>
+            <button onClick={handleEdit} disabled={isLoading}>
+              Save
+            </button>
+            <button onClick={() => setIsEditing(false)} disabled={isLoading}>
+              Cancel
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

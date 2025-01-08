@@ -47,7 +47,7 @@ const login = asyncHandler(async (req, res) => {
     throw new CustomError('Incorrect email', 401);
   };
 
-  const deletedUser = await prisma.user.findUnique({ where: { email, isDeleted: true } });
+  const deletedUser = await prisma.user.findFirst({ where: { email, isDeleted: true } });
   if (deletedUser) {
     throw new CustomError('User has been deleted. Please contact admin for assistance', 401);
   }
@@ -57,6 +57,10 @@ const login = asyncHandler(async (req, res) => {
     throw new CustomError('Incorrect password', 401);
   };
 
+  if (!process.env.JWT_SECRET) {
+    throw new CustomError('JWT_SECRET is not defined', 500);
+  }
+
   const token = jwt.sign(
     { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin },
     process.env.JWT_SECRET,
@@ -65,7 +69,7 @@ const login = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: `Welcome back ${user.username}`,
+    message: 'Welcome back ' + user.username,
     token,
     user: { id: user.id, username: user.username, email: user.email }
   })
