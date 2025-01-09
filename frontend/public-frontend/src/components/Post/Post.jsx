@@ -3,7 +3,6 @@
 import { useParams } from 'react-router-dom';
 import usePost from '../../hooks/usePost';
 import CommentsList from '../CommentsList/CommentsList';
-import NewComment from '../NewComment/NewComment';
 import './Post.css';
 
 const Post = () => {
@@ -28,7 +27,6 @@ const Post = () => {
           <h2>Comments</h2>
         </div>
         <CommentsList postId={postId} />
-        <NewComment postId={postId} />
       </>
      )}
     </div>
