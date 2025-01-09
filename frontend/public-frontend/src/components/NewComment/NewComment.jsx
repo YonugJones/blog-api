@@ -3,7 +3,7 @@ import { createComment } from '../../api/api';
 import { useAuth } from '../../context/authContext';
 import './NewComment.css';
 
-const NewComment = ({ postId }) => {
+const NewComment = ({ postId, updateComments }) => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -12,8 +12,8 @@ const NewComment = ({ postId }) => {
 
   const handleChange = (e) => {
     setContent(e.target.value);
-    setError(null); 
-    setSuccess(false); 
+    setError(null);
+    setSuccess(false);
   };
 
   const handleSubmit = async (e) => {
@@ -21,9 +21,10 @@ const NewComment = ({ postId }) => {
     setLoading(true);
 
     try {
-      await createComment(postId, { content });
+      const newComment = await createComment(postId, { content });
       setContent('');
-      setSuccess(true); 
+      setSuccess(true);
+      updateComments((prevComments) => [...prevComments, newComment.data]);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to add comment');
     } finally {
@@ -33,25 +34,25 @@ const NewComment = ({ postId }) => {
 
   return (
     <div className="new-comment">
-      {isLoggedIn && 
+      {isLoggedIn && (
         <>
           <h2>Add a Comment</h2>
           <form className="new-comment-form" onSubmit={handleSubmit}>
-          <textarea
-            name="content"
-            value={content}
-            onChange={handleChange}
-            placeholder="Write your comment here..."
-            required
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Adding...' : 'Add Comment'}
-          </button>
-        </form>
-        {success && <p className="success-message">Comment added successfully!</p>}
-        {error && <p className="error-message">{error}</p>}
+            <textarea
+              name="content"
+              value={content}
+              onChange={handleChange}
+              placeholder="Write your comment here..."
+              required
+            />
+            <button type="submit" disabled={loading}>
+              {loading ? 'Adding...' : 'Add Comment'}
+            </button>
+          </form>
+          {success && <p className="success-message">Comment added successfully!</p>}
+          {error && <p className="error-message">{error}</p>}
         </>
-      }
+      )}
     </div>
   );
 };
