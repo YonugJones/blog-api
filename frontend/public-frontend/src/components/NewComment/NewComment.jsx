@@ -36,7 +36,6 @@ const NewComment = ({ postId, updateComments }) => {
     <div className="new-comment">
       {isLoggedIn && (
         <>
-          <h2>Add a Comment</h2>
           <form className="new-comment-form" onSubmit={handleSubmit}>
             <textarea
               name="content"
