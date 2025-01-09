@@ -4,7 +4,7 @@ import { likeComment, unlikeComment, editComment, softDeleteComment } from '../.
 import './Comment.css';
 
 const Comment = ({ comment, postId, onUpdate }) => {
-  const { userId } = useAuth(); 
+  const { user } = useAuth(); 
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,9 +29,9 @@ const Comment = ({ comment, postId, onUpdate }) => {
   const handleEdit = async () => {
     try {
       setIsLoading(true);
-      await editComment(postId, comment.id, { content: editedContent });
+      const updatedComment = await editComment(postId, comment.id, { content: editedContent });
       setIsEditing(false);
-      onUpdate();
+      onUpdate(comment.id, updatedComment.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to edit comment');
     } finally {
@@ -66,10 +66,7 @@ const Comment = ({ comment, postId, onUpdate }) => {
           disabled={isLoading}
         />
       ) : (
-        <>
           <p className="content">{comment.content}</p>
-          <button onClick={() => setIsEditing(true)}>Edit Comment</button>
-        </>
       )}
 
       <div className="comment-footer">
@@ -77,7 +74,7 @@ const Comment = ({ comment, postId, onUpdate }) => {
           {comment.isLikedByUser ? 'Unlike' : 'Like'} ({comment._count.CommentLike})
         </button>
 
-        {userId === comment.user.id && !isEditing && (
+        {user.id === comment.user.id && !isEditing && (
           <>
             <button onClick={() => setIsEditing(true)} disabled={isLoading}>
               Edit

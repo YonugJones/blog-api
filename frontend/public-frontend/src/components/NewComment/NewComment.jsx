@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createComment } from '../../api/api';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/authContext';
 import './NewComment.css';
 
 const NewComment = ({ postId }) => {
