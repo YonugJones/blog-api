@@ -16,8 +16,6 @@ apiClient.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-export const signup = (userData) => 
-  apiClient.post('/auth/signup', userData).then((res) => res.data);
 export const login = (credentials) => 
   apiClient.post('/auth/login', credentials).then((res) => {
     const { token, user } = res.data;
