@@ -1,4 +1,5 @@
 import { useAuth } from '../../context/authContext';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const { user, logout, isAdmin } = useAuth();
@@ -12,7 +13,7 @@ const Header = () => {
           <button onClick={logout}>Logout</button>
         </div>
       ) : (
-        <p>Please login</p>
+        <Link to='/login'>Please login</Link>
       )}
     </header>
   )
