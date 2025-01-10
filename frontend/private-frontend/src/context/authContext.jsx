@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { jwtDecode } from 'jwt-decode'; 
 import { login as loginAPI, logout as logoutAPI } from '../api/authAPI';
 
 const AuthContext = createContext();
@@ -7,28 +8,64 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    if (token && userId) {
-      setUser({ id: userId, token })
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); 
+        setUser({
+          id: decoded.id,
+          isAdmin: decoded.isAdmin,
+          token,
+        });
+      } catch (err) {
+        console.error('Invalid token:', err);
+        logout();
+      }
     }
-    setLoading(false)
-  }, [])
+    setLoading(false);
+  }, []);
 
   const login = async (credentials) => {
-    const { user, token } = await loginAPI(credentials);
-    setUser({ id: user.id, isAdmin: user.isAdmin, token });
+    setError(null);
+    setLoading(true);
+
+    try {
+      const { user, token } = await loginAPI(credentials);
+      localStorage.setItem('token', token);
+      setUser({
+        id: user.id,
+        isAdmin: user.isAdmin,
+        token,
+      });
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      throw err; 
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
     logoutAPI();
+    localStorage.removeItem('token');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin: user?.isAdmin || false, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAdmin: user?.isAdmin || false,
+        isLoggedIn: !!user,
+        loading,
+        error,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
