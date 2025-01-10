@@ -9,6 +9,9 @@ const ProtectedRoute = ({ adminOnly = false, redirectPath = '/login' }) => {
     return <div>Loading...</div>
   };
 
+  console.log('isLoggedIn:', isLoggedIn, 'isAdmin:', isAdmin, 'adminOnly:', adminOnly);
+
+
   if (!isLoggedIn) {
     return <Navigate to={redirectPath} replace/>
   };

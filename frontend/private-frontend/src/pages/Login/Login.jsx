@@ -19,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(formData); 
-      navigate('/'); 
+      navigate('/admin'); 
     } catch (err) {
       console.error('Login error:', err);
     }

@@ -15,8 +15,10 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       try {
         const decoded = jwtDecode(token); 
+        console.log('Decoded token:', decoded);
         setUser({
           id: decoded.id,
+          username: decoded.username,
           isAdmin: decoded.isAdmin,
           token,
         });
@@ -37,6 +39,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', token);
       setUser({
         id: user.id,
+        username: user.username,
         isAdmin: user.isAdmin,
         token,
       });
