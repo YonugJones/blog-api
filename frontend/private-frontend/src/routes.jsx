@@ -5,9 +5,10 @@ import ErrorPage from './components/ErrorPage/ErrorPage';
 import Login from './pages/Login/Login';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
+import ManagePosts from './pages/ManagePosts/ManagePosts';
 
 // Placeholder components for sub-routes
-const ManagePosts = () => <div>Manage Posts</div>;
+
 const ManageComments = () => <div>Manage Comments</div>;
 const ManageUsers = () => <div>Manage Users</div>;
 
