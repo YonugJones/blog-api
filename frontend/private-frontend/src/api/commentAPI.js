@@ -19,22 +19,4 @@ apiClient.interceptors.request.use((config) => {
 export const fetchCommentsByPostIdAPI = (postId) => 
   apiClient.get(`/posts/${postId}/comments`).then((res) => res.data);
 export const adminSoftDeleteCommentAPI = (postId, commentId) =>
-  apiClient.delete(`/posts/${postId}/comments/${commentId}`).then((res) => res.data);
-
-
-
-
-/*
-
-## Comments
-
-| Method | Endpoint | Description | Authentication |
-| --- | --- | --- | --- |
-| GET | /posts/:postId/comments | Fetch all comments from single blog post | Yes |
-| POST | /posts/:postId/comments | Create a comment to a blog post | Yes |
-| PUT | /posts/:postId/comments/:commentId | Update a comment to a blog post | Yes(author) |
-| POST | /posts/:postId/comments/:commentId/like | Likes a comment | Yes |
-| POST | /posts/:postId/comments/:commentId/unlike | Unlikes a comment | Yes |
-| DELETE | /posts/:postId/comments/:commentId | Soft deletes a comment | Yes(author) |
-
-*/
+  apiClient.delete(`/posts/admin/${postId}/comments/${commentId}`).then((res) => res.data);

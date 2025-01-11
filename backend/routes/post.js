@@ -18,6 +18,6 @@ router.put('/:postId/comments/:commentId', authenticateToken, commentController.
 router.post('/:postId/comments/:commentId/like', authenticateToken, commentController.likeComment);
 router.post('/:postId/comments/:commentId/unlike', authenticateToken, commentController.unlikeComment);
 router.delete('/:postId/comments/:commentId', authenticateToken, commentController.softDeleteComment);
-router.delete('/:postId/comments/:commentId', authenticateToken, authorizeAdmin, commentController.adminSoftDeleteComment);
+router.delete('/admin/:postId/comments/:commentId', authenticateToken, authorizeAdmin, commentController.adminSoftDeleteComment);
 
 module.exports = router;

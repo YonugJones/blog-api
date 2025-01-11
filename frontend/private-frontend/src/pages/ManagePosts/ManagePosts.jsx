@@ -67,8 +67,8 @@ const ManagePosts = () => {
               <td>{new Date(post.createdAt).toLocaleDateString()}</td>
               <td>
                 <button onClick={() => handleSoftDelete(post.id)}>Soft Delete</button>
-                <button onClick={() => navigate(`/admin/posts/edit/${post.id}`)}>Edit</button>
-                <button>Comments (not working yet)</button>
+                <button onClick={() => navigate(`/admin/posts/${post.id}/edit`)}>Edit</button>
+                <button onClick={() => navigate(`/admin/posts/${post.id}/comments`)}>Comments</button>
               </td>
             </tr>
           ))}

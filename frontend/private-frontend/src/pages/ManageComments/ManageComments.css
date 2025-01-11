@@ -1,0 +1,31 @@
+.manage-comments {
+  padding: 20px;
+}
+
+.manage-comments h2 {
+  margin-bottom: 20px;
+}
+
+.manage-comments table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.manage-comments th,
+.manage-comments td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.manage-comments th {
+  background-color: #f2f2f2;
+}
+
+.manage-comments tr:hover {
+  background-color: #297a72;
+}
+
+.manage-comments .actions button {
+  margin-right: 10px;
+}
