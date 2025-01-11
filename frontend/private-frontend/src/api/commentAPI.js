@@ -18,7 +18,8 @@ apiClient.interceptors.request.use((config) => {
 
 export const fetchCommentsByPostIdAPI = (postId) => 
   apiClient.get(`/posts/${postId}/comments`).then((res) => res.data);
-
+export const adminSoftDeleteCommentAPI = (postId, commentId) =>
+  apiClient.delete(`/posts/${postId}/comments/${commentId}`).then((res) => res.data);
 
 
 
