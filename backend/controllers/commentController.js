@@ -219,6 +219,29 @@ const softDeleteComment = asyncHandler(async (req, res) => {
   });
 });
 
+const adminSoftDeleteComment = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const admin = prisma.user.findUnique({ where: { isAdmin: true } })
+
+  if (user.id !== admin.id) {
+    throw new CustomError('Unauthorized to delete comment', 405)
+  }
+
+  const commentId = parseInt(req.params.commentId, 10);
+  const comment = await prisma.comment.findUnique({ where:  { id: commentId, isDeleted: false } });
+  if (!comment) {
+    throw new CustomError('Comment not found or already deleted', 404);
+  }
+
+  await prisma.comment.update({ where: { id: commentId }, data: { isDeleted: true } });
+
+  res.status(200).json({
+    success: true,
+    message: 'Comment deleted successfully',
+    data: null,
+  });
+})
+
 module.exports = {
   getPostComments,
   createComment,
@@ -226,4 +249,5 @@ module.exports = {
   likeComment,
   unlikeComment,
   softDeleteComment,
+  adminSoftDeleteComment
 };
