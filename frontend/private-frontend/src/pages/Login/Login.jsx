@@ -19,10 +19,10 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(formData); 
-      navigate('/admin'); 
+      navigate('/admin');
     } catch (err) {
       console.error('Login error:', err);
-    }
+    } 
   };
 
   return (

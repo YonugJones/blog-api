@@ -13,10 +13,10 @@ const AdminDashboard = () => {
         <h2>Dashboard Option</h2>
         <ul>
           <li>
-            <button onClick={() => navigate('/admin/posts')}>Manage Posts</button>
+            <button onClick={() => navigate('/admin/posts/new')}>New Post</button>
           </li>
           <li>
-            <button onClick={() => navigate('/admin/comments')}>Manage Comments</button>
+            <button onClick={() => navigate('/admin/posts')}>Manage Posts</button>
           </li>
           <li>
             <button onClick={() => navigate('/admin/users')}>Manage Users</button>

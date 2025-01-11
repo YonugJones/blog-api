@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchPostsAPI, softDeletePostAPI } from '../../api/postAPI';
 import './ManagePosts.css';
 
@@ -68,12 +68,13 @@ const ManagePosts = () => {
               <td>
                 <button onClick={() => handleSoftDelete(post.id)}>Soft Delete</button>
                 <button onClick={() => navigate(`/admin/posts/edit/${post.id}`)}>Edit</button>
+                <button>Comments (not working yet)</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Link to='/admin'>Home</Link>
+      
     </div>
   );
 };

@@ -1,56 +1,29 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { fetchPostByIdAPI, updatePostAPI } from "../../api/postAPI";
-import './EditPostForm.css';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { createPostAPI } from "../../api/postAPI"
+import './NewPostForm.css';
 
-const EditPostForm = () => {
-  const { postId } = useParams();
+
+const NewPostForm = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState({ title: '', content: '', imageUrl: '' });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadPost = async () => {
-      try {
-        const response = await fetchPostByIdAPI(postId);
-        if (response.success) {
-          setPost(response.data);
-        } else {
-          setError('Failed to load post data.');
-        }
-      } catch (err) {
-        setError('An error occurred while loading post data.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPost();
-  }, [postId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await updatePostAPI(postId, post);
+      const response = await createPostAPI(post);
       if (response.success) {
-        alert('Post updated successfully!');
+        alert('Post created successfully!');
         navigate('/admin/posts');
-      } else {
-        alert('Failed to update post.');
       }
     } catch (err) {
-      console.error('Error updating post:', err);
+      console.error('Error creating post:', err);
     }
   }
 
-  if (loading) return <p>Loading post...</p>;
-  if (error) return <p>{error}</p>;
-
   return (
-    <div className="edit-post-form">
-      <h2>Edit Post</h2>
+    <div className="new-post-form">
+      <h2>Create Post</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Title: </label>
@@ -83,8 +56,8 @@ const EditPostForm = () => {
           />
         </div>
         <div className="button-container">
-          <button type="submit">Save changes</button>
-          <button type="button" onClick={() => navigate('/admin/posts')}>
+          <button type="submit">Create Post</button>
+          <button type="button" onClick={() => navigate('/admin')}>
             Cancel
           </button>
         </div>
@@ -93,4 +66,4 @@ const EditPostForm = () => {
   )
 }
 
-export default EditPostForm;
+export default NewPostForm;
