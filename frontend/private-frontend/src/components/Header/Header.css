@@ -1,9 +1,13 @@
 .header {
-  background-color: #333;
+  top: 0;
+  left: 0;
+  background-color: #1a6c68;
   color: white;
   padding: 20px;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
+  width: 95vw;
 }
 
 .header h1 {
