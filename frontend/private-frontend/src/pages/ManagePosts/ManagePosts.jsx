@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchPostsAPI, softDeletePostAPI } from '../../api/postAPI';
 import './ManagePosts.css';
 
@@ -7,6 +7,7 @@ const ManagePosts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -66,7 +67,7 @@ const ManagePosts = () => {
               <td>{new Date(post.createdAt).toLocaleDateString()}</td>
               <td>
                 <button onClick={() => handleSoftDelete(post.id)}>Soft Delete</button>
-                <button>Edit</button>
+                <button onClick={() => navigate(`/admin/posts/edit/${post.id}`)}>Edit</button>
               </td>
             </tr>
           ))}
